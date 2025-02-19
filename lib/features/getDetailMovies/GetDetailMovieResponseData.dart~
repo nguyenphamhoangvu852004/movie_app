@@ -1,0 +1,14 @@
+import 'package:my_flutter_app/constants/interfaces/ResponseData.dart';
+import 'package:my_flutter_app/data/DetailMovies.dart';
+
+class GetDetailMovieResponseData implements ResponseData{
+  DetailMovies _detailMovies;
+
+  GetDetailMovieResponseData(this._detailMovies);
+
+  DetailMovies get detailMovies => _detailMovies;
+
+  set detailMovies(DetailMovies value) {
+    _detailMovies = value;
+  }
+}
