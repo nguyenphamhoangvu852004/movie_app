@@ -12,7 +12,6 @@ class DetailMovies {
    String _showtimes;
    int _view;
     List<Episode> _episode;
-
   DetailMovies(
       this._movies,
       this._content,

@@ -26,7 +26,6 @@ class GetSingleMovies implements InputBoundary {
       var decodedData = jsonDecode(response.body);
       var data = decodedData["data"];
       var items = data["items"];
-      print(decodedData);
       for (var item in items) {
         List<Category> categoryList = [];
         for (var category in item["category"]) {
@@ -67,10 +66,10 @@ class GetSingleMovies implements InputBoundary {
       var responseData = GetSingleMoviesResponseData(fetchedMovies);
       presenter.execute(responseData);
     } catch (e) {
-      print("Error: $e");
       var responseData = GetSingleMoviesResponseData([]);
       presenter.execute(responseData);
       return;
     }
   }
 }
+

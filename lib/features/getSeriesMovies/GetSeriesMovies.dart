@@ -14,7 +14,7 @@ class GetSeriesMovies implements InputBoundary {
   final OutputBoundary presenter;
   GetSeriesMovies(this.presenter);
   @override
-  execute(RequestData requestData) async {
+  Future<void> execute(RequestData requestData) async {
     List<Movies> fetchedMovies = [];
     var page;
     if (requestData is GetSeriesMoviesRequestData) {

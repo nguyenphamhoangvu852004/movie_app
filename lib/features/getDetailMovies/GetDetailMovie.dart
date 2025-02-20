@@ -17,7 +17,7 @@ class GetDetailMovie extends InputBoundary {
   GetDetailMovie(this._presenter);
 
   @override
-  execute(RequestData requestData) async {
+  Future<void> execute(RequestData requestData) async {
     try {
       final movieData = (requestData as GetDetailMovieRequestData);
       final currentMovie = movieData.movies;

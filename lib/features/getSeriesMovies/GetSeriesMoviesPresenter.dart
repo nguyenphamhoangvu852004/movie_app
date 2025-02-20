@@ -7,8 +7,9 @@ import 'package:movie_app/data/Movies.dart';
 import 'package:movie_app/features/getSeriesMovies/GetSeriesMoviesResponseData.dart';
 
 class GetSeriesMoviesPresenter implements OutputBoundary {
-  List<Movies> _movies = [];
+  List<Movies> _movies;
 
+  GetSeriesMoviesPresenter(this._movies);
 
   @override
   void execute(ResponseData responseData) {

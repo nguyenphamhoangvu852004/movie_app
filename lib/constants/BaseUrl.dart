@@ -7,3 +7,4 @@ const APP_DOMAIN_API_DS_PHIM_BO = 'https://phimapi.com/v1/api/danh-sach/phim-bo'
 const APP_DOMAIN_API_DS_PHIM_HOAT_HINH = 'https://phimapi.com/v1/api/danh-sach/hoat-hinh';
 const APP_DOMAIN_API_DS_TV_SHOWS = 'https://phimapi.com/v1/api/danh-sach/tv-shows';
 const APP_DOMAIN_API_DS_TYPES = 'https://phimapi.com/the-loai';
+const APP_DOMAIN_API_DS_COUNTRY = 'https://phimapi.com/quoc-gia';

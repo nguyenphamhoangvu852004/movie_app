@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+
 class FindMovieScreen extends StatefulWidget {
-  final Widget findMovieWidget;
+  final Widget getTypeListWidget;
+  final Widget getCountryListWidget;
 
-
-  const FindMovieScreen(this.findMovieWidget, {super.key});
+  const FindMovieScreen(this.getTypeListWidget, this.getCountryListWidget, {super.key});
 
   @override
   State<FindMovieScreen> createState() => _FindMovieScreenState();
@@ -13,21 +14,57 @@ class FindMovieScreen extends StatefulWidget {
 class _FindMovieScreenState extends State<FindMovieScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.black,
-            Colors.pinkAccent,
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Tìm kiếm phim"),
+        backgroundColor: Colors.white,
+        elevation: 1,
       ),
-      child: ListView(
-        children: [
-          widget.findMovieWidget
-        ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text(
+                      "Chọn thể loại",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  widget.getTypeListWidget,
+                ],
+              ),
+
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text(
+                      "Chọn quốc gia",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  widget.getCountryListWidget,
+                ],
+              ),
+
+            ],
+          ),
+        ),
       ),
     );
   }

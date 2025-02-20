@@ -149,11 +149,12 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
       if (page == 1) data.clear();  // Clear existing data on the first page
       data.addAll(widget.getSingleMoviesPresenter.getData());
       isLoadingMore = false;
-      // Check if there's more data to load
+
       if (widget.getSingleMoviesPresenter.getData().isEmpty) {
         hasMoreData = false;
       }
     });
+  
   }
 
   void loadMoreMovies() {

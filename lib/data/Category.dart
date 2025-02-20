@@ -22,4 +22,9 @@ class Category {
   set id(String value) {
     _id = value;
   }
+
+   @override
+  String toString() {
+    return 'Category{_id: $_id, _name: $_name, _slug: $_slug}';
+  }
 }

@@ -18,7 +18,7 @@ class GetTypeList implements InputBoundary {
     var page = (requestData as GetTypeListRequestData).page;
     try {
       var response =
-          await http.get(Uri.parse("$APP_DOMAIN_API_DS_PHIM_LE?page=$page"));
+          await http.get(Uri.parse("$APP_DOMAIN_API_DS_TYPES?page=$page"));
       var decodedData = jsonDecode(response.body);
       List<Category> categories = [];
       for (var item in decodedData) {
