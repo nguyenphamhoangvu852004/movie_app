@@ -1,5 +1,5 @@
 
-import 'package:movie_app/constants/BaseUrl.dart';
+import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/constants/interfaces/RequestData.dart';
@@ -67,7 +67,6 @@ class GetDetailMovie extends InputBoundary {
 
       _presenter.execute(GetDetailMovieResponseData(detailMovie));
     } catch (e) {
-      print("Error in GetDetailMovie: $e");
       // Trả về response rỗng khi có lỗi
       _presenter.execute(GetDetailMovieResponseData(null as DetailMovies));
     }

@@ -6,14 +6,13 @@ import 'package:movie_app/data/Movies.dart';
 import 'package:movie_app/features/getDetailMovies/GetDetailMovieRequestData.dart';
 import 'package:movie_app/ui/components/VideoPlayerScreen.dart';
 
-// Main Detail Widget
 class DetailMovieWidget extends StatefulWidget {
   final Movies movie;
   final InputBoundary getDetailMovie;
   final OutputBoundary getDetailMoviePresenter;
 
-  DetailMovieWidget(
-      this.movie, this.getDetailMovie, this.getDetailMoviePresenter);
+  const DetailMovieWidget(
+      this.movie, this.getDetailMovie, this.getDetailMoviePresenter, {super.key});
 
   @override
   _DetailMovieWidgetState createState() => _DetailMovieWidgetState();
@@ -75,7 +74,7 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
               child: Hero(
                 tag: widget.movie.id,
                 child: Image.network(
-                  "https://phimimg.com/${widget.movie.posterUrl}",
+                  widget.movie.posterUrl,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -175,7 +174,6 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
                   _buildInfoRow("Total Episodes", detailMovie!.episodeTotal),
                   if (detailMovie!.showtimes.isNotEmpty)
                     _buildInfoRow("Show Times", detailMovie!.showtimes),
-                  _buildInfoRow("Total Episodes", detailMovie!.episodeTotal),
 
 
                   _buildSection(
@@ -318,7 +316,7 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.network(
-                                "https://phimimg.com/${detailMovie!.movies.thumbUrl}",
+                                detailMovie!.movies.thumbUrl,
                                 width: 100,
                                 height: 60,
                                 fit: BoxFit.cover,

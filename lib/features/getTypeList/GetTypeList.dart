@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:movie_app/constants/BaseUrl.dart';
+import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/constants/interfaces/RequestData.dart';
@@ -15,10 +15,9 @@ class GetTypeList implements InputBoundary {
 
   @override
   execute(RequestData requestData) async {
-    var page = (requestData as GetTypeListRequestData).page;
     try {
       var response =
-          await http.get(Uri.parse("$APP_DOMAIN_API_DS_PHIM_LE?page=$page"));
+          await http.get(Uri.parse(APP_DOMAIN_API_DS_PHIM_LE));
       var decodedData = jsonDecode(response.body);
       List<Category> categories = [];
       for (var item in decodedData) {

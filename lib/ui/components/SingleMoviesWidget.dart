@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/data/Movies.dart';
-import 'package:movie_app/features/getSingleMovies/GetSingleMoviesRequestData.dart';
+import 'package:movie_app/features/getMovieList/GetMovieListRequestData.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../constants/interfaces/InputBoundary.dart';
 import 'DetailMovieWidget.dart';
@@ -25,7 +26,7 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
   int currentPage = 1;
   bool isLoadingMore = false;
   bool hasMoreData = true;  // To check if there is more data to load
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -96,7 +97,7 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
             ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: Image.network(
-                'https://phimimg.com/${movie.posterUrl}',
+                '${movie.posterUrl}',
                 height: 180,
                 width: 130,
                 fit: BoxFit.cover,
@@ -142,7 +143,7 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
     if (isLoadingMore) return;
 
     setState(() => isLoadingMore = true);
-    var requestData = GetSingleMoviesRequestData(page);
+    var requestData = GetMovieListRequestData(APP_DOMAIN_API_DS_PHIM_LE,page);
     await widget.getSingleMovies.execute(requestData);
 
     setState(() {

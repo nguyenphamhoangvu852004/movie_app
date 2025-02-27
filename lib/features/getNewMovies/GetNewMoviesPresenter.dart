@@ -5,7 +5,7 @@ import 'package:movie_app/data/Movies.dart';
 import 'package:movie_app/features/getNewMovies/GetNewMoviesResponseData.dart';
 
 class GetNewMoviesPresenter implements OutputBoundary{
-  List<Movies> _movies;
+  final List<Movies> _movies;
 
   GetNewMoviesPresenter(this._movies);
 

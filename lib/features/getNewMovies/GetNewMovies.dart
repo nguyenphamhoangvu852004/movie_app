@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:movie_app/constants/BaseUrl.dart';
+import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/constants/interfaces/RequestData.dart';
@@ -79,7 +79,7 @@ class GetNewMovies implements InputBoundary{
       return;
     }
   }
-  // Hàm để lấy phần sau "phiming.com/"
+
   String getPosterUrl(String url) {
     // Kiểm tra nếu URL chứa "phimimg.com/"
     int index = url.indexOf('phimimg.com/');

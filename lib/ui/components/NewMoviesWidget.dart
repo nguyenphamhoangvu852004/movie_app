@@ -1,8 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/data/Movies.dart';
+import 'package:movie_app/features/getMovieList/GetMovieListRequestData.dart';
+import 'package:movie_app/features/getNewMovies/GetNewMovies.dart';
 import 'package:movie_app/features/getNewMovies/GetNewMoviesRequestData.dart';
 import 'package:movie_app/ui/components/DetailMovieWidget.dart';
 import 'dart:async';
@@ -14,8 +17,8 @@ class NewMoviesWidget extends StatefulWidget {
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
 
-  NewMoviesWidget(this.title, this.getNewMovies, this.getNewMoviesPresenter,
-      this.getDetailMovies, this.getDetailMoviesPresenter);
+  const NewMoviesWidget(this.title, this.getNewMovies, this.getNewMoviesPresenter,
+      this.getDetailMovies, this.getDetailMoviesPresenter, {super.key});
 
   @override
   State<NewMoviesWidget> createState() => _NewMoviesWidgetState();
@@ -24,7 +27,7 @@ class NewMoviesWidget extends StatefulWidget {
 class _NewMoviesWidgetState extends State<NewMoviesWidget> {
   List<Movies> data = [];
   int currentPage = 1;
-  PageController _pageController = PageController(viewportFraction: 0.9);
+  final PageController _pageController = PageController(viewportFraction: 0.9);
   Timer? _timer;
 
   @override

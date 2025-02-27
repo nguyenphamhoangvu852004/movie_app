@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/data/Movies.dart';
-import 'package:movie_app/features/getSeriesMovies/GetSeriesMoviesRequestData.dart';
+import 'package:movie_app/features/getMovieList/GetMovieListRequestData.dart';
 import 'package:shimmer/shimmer.dart';
 import 'DetailMovieWidget.dart';
 
@@ -13,8 +14,8 @@ class SeriesMoviesWidget extends StatefulWidget {
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
 
-  SeriesMoviesWidget(
-      this.title, this.getSeriesMovies, this.getSeriesMoviesPresenter, this.getDetailMovies, this.getDetailMoviesPresenter);
+  const SeriesMoviesWidget(
+      this.title, this.getSeriesMovies, this.getSeriesMoviesPresenter, this.getDetailMovies, this.getDetailMoviesPresenter, {super.key});
 
   @override
   State<SeriesMoviesWidget> createState() => _SeriesMoviesWidgetState();
@@ -24,7 +25,7 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
   List<Movies> data = [];
   int currentPage = 1;
   bool isLoadingMore = false;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -97,7 +98,7 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
             ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: Image.network(
-                'https://phimimg.com/${movie.posterUrl}',
+                movie.posterUrl,
                 height: 180,
                 width: 130,
                 fit: BoxFit.cover,
@@ -141,14 +142,11 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
 
   void fetchSeriesMoviesData(int page) async {
     setState(() => isLoadingMore = true);
-    var requestData = GetSeriesMoviesRequestData(page);
+    var requestData = GetMovieListRequestData(APP_DOMAIN_API_DS_PHIM_BO,page);
     await widget.getSeriesMovies.execute(requestData);
     setState(() {
       if (page == 1) data.clear();
       data.addAll(widget.getSeriesMoviesPresenter.getData());
-      for (var item in data){
-        print(item.toString());
-      }
       isLoadingMore = false;
     });
   }

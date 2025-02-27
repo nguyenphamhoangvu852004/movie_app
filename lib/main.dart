@@ -2,21 +2,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_app/data/Movies.dart';
-import 'package:movie_app/features/getSingleMovies/GetSingleMovies.dart';
+import 'package:movie_app/features/getMovieList/GetMovieList.dart';
 import 'package:movie_app/ui/components/SingleMoviesWidget.dart';
 import 'package:movie_app/ui/components/SeriesMoviesWidget.dart';
 import 'package:movie_app/ui/components/NewMoviesWidget.dart';
 import 'package:movie_app/ui/layouts/Layout.dart';
 import 'package:movie_app/features/getNewMovies/GetNewMovies.dart';
-import 'package:movie_app/features/getSeriesMovies/GetSeriesMovies.dart';
 import 'package:movie_app/features/getDetailMovies/GetDetailMovie.dart';
 import 'package:movie_app/features/getDetailMovies/GetDetailMoviePresenter.dart';
-import 'package:movie_app/features/getSingleMovies/GetSingleMoviesPresenter.dart';
 import 'package:movie_app/features/getNewMovies/GetNewMoviesPresenter.dart';
 import 'package:movie_app/ui/screens/HomeScreen.dart';
-
 import 'features/authentication/WidgetTree.dart';
-import 'features/getSeriesMovies/GetSeriesMoviesPresenter.dart';
+import 'features/getMovieList/GetMovieListPresenter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,13 +23,14 @@ void main() async {
   var getDetailMovie = GetDetailMovie(getDetailPresenter);
 
   List<Movies> listSingleMovies = [];
-  var getSingleMoviesPresenter = GetSingleMoviesPresenter(listSingleMovies);
-  var getSingleMovies = GetSingleMovies(getSingleMoviesPresenter);
+  var getSingleMoviesPresenter = GetMovieListPresenter(listSingleMovies);
+  var getSingleMovies = GetMovieList(getSingleMoviesPresenter);
   var singleMoviesWidget = SingleMoviesWidget("Phim Lẻ", getSingleMovies,
       getSingleMoviesPresenter, getDetailMovie, getDetailPresenter);
 
-  var getSeriesPresenter = GetSeriesMoviesPresenter();
-  var getSeriesMovies = GetSeriesMovies(getSeriesPresenter);
+  List<Movies> listSeriesMovies = [];
+  var getSeriesPresenter = GetMovieListPresenter(listSeriesMovies);
+  var getSeriesMovies = GetMovieList(getSeriesPresenter);
   var seriesMoviesWidget = SeriesMoviesWidget("Phim Bộ", getSeriesMovies,
       getSeriesPresenter, getDetailMovie, getDetailPresenter);
 
