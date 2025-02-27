@@ -3,8 +3,8 @@ import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/data/Movies.dart';
-import 'package:movie_app/features/getMovieList/GetMovieListRequestData.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../features/getMovieList/GetMovieListRequestData.dart';
 import 'DetailMovieWidget.dart';
 
 class SeriesMoviesWidget extends StatefulWidget {

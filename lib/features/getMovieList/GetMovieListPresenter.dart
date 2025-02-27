@@ -1,0 +1,18 @@
+import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
+import 'package:movie_app/constants/interfaces/ResponseData.dart';
+import 'package:movie_app/data/Movies.dart';
+import 'package:movie_app/features/getMovieList/GetMovieListResponseData.dart';
+
+class GetMovieListPresenter implements OutputBoundary {
+  List<Movies> list;
+  GetMovieListPresenter(this.list);
+
+  @override
+  void execute(ResponseData responseData) {
+    if (responseData is GetMovieListResponseData) {
+      list = responseData.list; // Cập nhật danh sách mới
+    }
+  }
+
+  List<Movies> getData() => list;
+}

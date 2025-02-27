@@ -1,11 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/data/Movies.dart';
-import 'package:movie_app/features/getMovieList/GetMovieListRequestData.dart';
-import 'package:movie_app/features/getNewMovies/GetNewMovies.dart';
 import 'package:movie_app/features/getNewMovies/GetNewMoviesRequestData.dart';
 import 'package:movie_app/ui/components/DetailMovieWidget.dart';
 import 'dart:async';
