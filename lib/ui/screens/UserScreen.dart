@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/features/authentication/Auth.dart';
+import 'package:movie_app/features/authentication/AuthRepo/AuthRepoImp.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -11,9 +11,9 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
 
-  final User? user = Auth().currentUser;
+  final User? user = AuthRepoImp().currentUser;
 
-  Future<void> signOut() async => await Auth().signOut();
+  Future<void> signOut() async => await AuthRepoImp().signOut();
 
   Widget _title() {
     return const Text("Authentication");

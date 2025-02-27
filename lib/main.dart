@@ -12,7 +12,7 @@ import 'package:movie_app/features/getDetailMovies/GetDetailMovie.dart';
 import 'package:movie_app/features/getDetailMovies/GetDetailMoviePresenter.dart';
 import 'package:movie_app/features/getNewMovies/GetNewMoviesPresenter.dart';
 import 'package:movie_app/ui/screens/HomeScreen.dart';
-import 'features/authentication/WidgetTree.dart';
+import 'ui/components/WidgetTree.dart';
 import 'features/getMovieList/GetMovieListPresenter.dart';
 
 void main() async {

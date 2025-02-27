@@ -2,16 +2,21 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/features/authentication/Auth.dart';
+import 'package:movie_app/features/authentication/AuthRepo/AuthRepoImp.dart';
 
-class LoginWidget extends StatefulWidget {
-  const LoginWidget({super.key});
+import 'package:flutter/material.dart';
+
+import '../../data/AuthResult.dart';
+import '../../features/authentication/AuthRepo/AuthRepo.dart';
+
+class AuthWidget extends StatefulWidget {
+  const AuthWidget({super.key});
 
   @override
-  State<LoginWidget> createState() => _LoginWidgetState();
+  State<AuthWidget> createState() => _AuthWidgetState();
 }
 
-class _LoginWidgetState extends State<LoginWidget> {
+class _AuthWidgetState extends State<AuthWidget> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -20,29 +25,58 @@ class _LoginWidgetState extends State<LoginWidget> {
   bool isLogin = true;
   bool isLoading = false;
   String? errorMessage;
+  final AuthRepo _authRepo = AuthRepoImp();
 
   Future<void> _authenticate() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => isLoading = true);
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
 
-    try {
-      if (isLogin) {
-        await Auth().signInWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
-      } else {
-        await Auth().createUserWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() => errorMessage = e.message);
-    } finally {
-      setState(() => isLoading = false);
+    AuthResult result;
+    if (isLogin) {
+      result = await _authRepo.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    } else {
+      result = await _authRepo.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
     }
+
+    setState(() {
+      isLoading = false;
+      if (result.isSuccess) {
+        print("Thành công: UID = ${result.uid}");
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        errorMessage = result.error ?? "Thất bại không rõ nguyên nhân";
+        print("Lỗi: $errorMessage");
+      }
+    });
+  }
+
+  Future<void> _loginWithGoogle() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    final result = await _authRepo.loginWithGoogle();
+    setState(() {
+      isLoading = false;
+      if (result!.isSuccess) {
+        print("Đăng nhập Google thành công: UID = ${result.uid}");
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        errorMessage = result.error ?? "Đăng nhập Google thất bại";
+        print("Lỗi Google: $errorMessage");
+      }
+    });
   }
 
   Widget _buildTextField(String label, TextEditingController controller, bool obscureText) {
@@ -77,10 +111,10 @@ class _LoginWidgetState extends State<LoginWidget> {
               _buildTextField('Password', _passwordController, true),
               if (!isLogin) _buildTextField('Xác nhận mật khẩu', _confirmPasswordController, true),
               if (errorMessage != null)
-                Text(errorMessage!, style: TextStyle(color: Colors.red)),
+                Text(errorMessage!, style: const TextStyle(color: Colors.red)),
               const SizedBox(height: 20),
               isLoading
-                  ? CircularProgressIndicator()
+                  ? const CircularProgressIndicator()
                   : ElevatedButton(
                 onPressed: _authenticate,
                 child: Text(isLogin ? 'Đăng nhập' : 'Đăng ký'),
@@ -89,10 +123,22 @@ class _LoginWidgetState extends State<LoginWidget> {
                 onPressed: () => setState(() => isLogin = !isLogin),
                 child: Text(isLogin ? 'Chưa có tài khoản? Đăng ký' : 'Đã có tài khoản? Đăng nhập'),
               ),
+              TextButton(
+                onPressed: _loginWithGoogle,
+                child: const Text('Đăng nhập bằng Google'),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 }
