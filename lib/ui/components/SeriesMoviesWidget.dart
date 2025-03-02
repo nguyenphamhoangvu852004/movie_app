@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
-import 'package:movie_app/data/Movies.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../features/getMovieList/GetMovieListRequestData.dart';
+import '../../model/Movies.dart';
 import 'DetailMovieWidget.dart';
 
+
 class SeriesMoviesWidget extends StatefulWidget {
-  final String title;
-  final InputBoundary getSeriesMovies;
-  final OutputBoundary getSeriesMoviesPresenter;
+  final InputBoundary getMoviesUseCase;
+  final OutputBoundary getMoviesPresenter;
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
-
   const SeriesMoviesWidget(
-      this.title, this.getSeriesMovies, this.getSeriesMoviesPresenter, this.getDetailMovies, this.getDetailMoviesPresenter, {super.key});
+      this.getMoviesUseCase,
+      this.getMoviesPresenter,
+      this.getDetailMovies,
+      this.getDetailMoviesPresenter,
+      {super.key});
 
   @override
   State<SeriesMoviesWidget> createState() => _SeriesMoviesWidgetState();
@@ -23,20 +26,12 @@ class SeriesMoviesWidget extends StatefulWidget {
 
 class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
   List<Movies> data = [];
-  int currentPage = 1;
-  bool isLoadingMore = false;
-  final ScrollController _scrollController = ScrollController();
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    fetchSeriesMoviesData(currentPage);
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 100 && !isLoadingMore) {
-        loadMoreMovies();
-      }
-    });
+    fetchMoviesData();
   }
 
   @override
@@ -45,33 +40,38 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text(
-            widget.title,
-            style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Đẩy 2 bên ra 2 đầu
+            children: [
+              const Text(
+                "Phim Bộ",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Thêm logic khi nhấn "Xem Thêm" nếu cần
+                  print("Xem Thêm được nhấn");
+                  // Navigator.push( context, MaterialPageRoute(builder: (context) => ListMoreMovieScreen(ListMoreMovieWidget())));
+                },
+                child: const Text(
+                  "Xem Thêm",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(
           height: 230,
-          child: ListView.builder(
-            controller: _scrollController,
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : data.isEmpty
+              ? const Center(child: Text("Không có dữ liệu", style: TextStyle(color: Colors.white)))
+              : ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: data.length + (isLoadingMore ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index == data.length && isLoadingMore) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                  ),
-                );
-              }
-              return buildMovieCard(data[index]);
-            },
+            itemCount: data.length,
+            itemBuilder: (context, index) => buildMovieCard(data[index]),
           ),
         ),
       ],
@@ -80,20 +80,17 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
 
   Widget buildMovieCard(Movies movie) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailMovieWidget(
-                movie, widget.getDetailMovies, widget.getDetailMoviesPresenter),
-          ),
-        );
-      },
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailMovieWidget(
+              movie, widget.getDetailMovies, widget.getDetailMoviesPresenter),
+        ),
+      ),
       child: Container(
         width: 130,
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
@@ -102,22 +99,15 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
                 height: 180,
                 width: 130,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return shimmerLoadingEffect(130, 180);
-                },
+                loadingBuilder: (context, child, loadingProgress) =>
+                loadingProgress == null ? child : shimmerLoadingEffect(),
               ),
             ),
-            SizedBox(height: 6.0),
             Text(
               movie.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
+              style: const TextStyle(fontSize: 14, color: Colors.white),
             ),
           ],
         ),
@@ -125,40 +115,31 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
     );
   }
 
-  Widget shimmerLoadingEffect(double width, double height) {
+  Widget shimmerLoadingEffect() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[800]!,
       highlightColor: Colors.grey[600]!,
       child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
+        width: 130,
+        height: 180,
+        color: Colors.black,
       ),
     );
   }
 
-  void fetchSeriesMoviesData(int page) async {
-    setState(() => isLoadingMore = true);
-    var requestData = GetMovieListRequestData(APP_DOMAIN_API_DS_PHIM_BO,page);
-    await widget.getSeriesMovies.execute(requestData);
+  void fetchMoviesData() async {
+    setState(() => isLoading = true);
+    var requestData = GetMovieListRequestData(
+        APP_DOMAIN_API_DS_PHIM_BO, APP_DEFAULT_PAGE, APP_DEFAULT_ITEM_PER_PAGE_HOME);
+    await widget.getMoviesUseCase.execute(requestData);
     setState(() {
-      if (page == 1) data.clear();
-      data.addAll(widget.getSeriesMoviesPresenter.getData());
-      isLoadingMore = false;
+      data = widget.getMoviesPresenter.getData();
+      isLoading = false;
     });
-  }
-
-  void loadMoreMovies() {
-    currentPage++;
-    fetchSeriesMoviesData(currentPage);
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
   }
 }

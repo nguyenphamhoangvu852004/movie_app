@@ -1,11 +1,10 @@
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/constants/interfaces/ResponseData.dart';
-import 'package:movie_app/data/Movies.dart';
+import 'package:movie_app/model/Movies.dart';
 import 'package:movie_app/features/getMovieList/GetMovieListResponseData.dart';
 
 class GetMovieListPresenter implements OutputBoundary {
-  List<Movies> list;
-  GetMovieListPresenter(this.list);
+  late List<Movies> list;
 
   @override
   void execute(ResponseData responseData) {

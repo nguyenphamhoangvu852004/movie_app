@@ -2,7 +2,7 @@
 
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/constants/interfaces/ResponseData.dart';
-import 'package:movie_app/data/DetailMovies.dart';
+import 'package:movie_app/model/DetailMovies.dart';
 import 'package:movie_app/features/getDetailMovies/GetDetailMovieResponseData.dart';
 
 class GetDetailMoviePresenter extends OutputBoundary {

@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:movie_app/data/AuthResult.dart';
+import 'package:movie_app/model/AuthResult.dart';
 import 'package:movie_app/features/authentication/AuthRepo/AuthRepo.dart';
 
 class AuthRepoImp implements AuthRepo {

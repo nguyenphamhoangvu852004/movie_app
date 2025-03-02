@@ -3,11 +3,11 @@ import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/constants/interfaces/RequestData.dart';
-import 'package:movie_app/data/DetailMovies.dart';
-import 'package:movie_app/data/Episode.dart';
+import 'package:movie_app/model/DetailMovies.dart';
+import 'package:movie_app/model/Episode.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:movie_app/data/ServerData.dart';
+import 'package:movie_app/model/ServerData.dart';
 import 'dart:convert';
 
 import 'package:movie_app/features/getDetailMovies/GetDetailMovieRequestData.dart';

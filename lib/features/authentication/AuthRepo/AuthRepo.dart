@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:movie_app/data/AuthResult.dart';
+import '../../../model/AuthResult.dart';
 
 abstract class AuthRepo {
   User? get currentUser;

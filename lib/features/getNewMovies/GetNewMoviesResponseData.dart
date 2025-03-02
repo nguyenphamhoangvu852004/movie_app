@@ -1,7 +1,7 @@
 
 
 import 'package:movie_app/constants/interfaces/ResponseData.dart';
-import 'package:movie_app/data/Movies.dart';
+import 'package:movie_app/model/Movies.dart';
 
 class GetNewMoviesResponseData implements ResponseData{
   List<Movies> _list;

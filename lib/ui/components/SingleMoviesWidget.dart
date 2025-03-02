@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
-import 'package:movie_app/data/Movies.dart';
 import 'package:movie_app/features/getMovieList/GetMovieListRequestData.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../constants/interfaces/InputBoundary.dart';
+import '../../model/Movies.dart';
 import 'DetailMovieWidget.dart';
 
 class SingleMoviesWidget extends StatefulWidget {
-  final String title;
-  final InputBoundary getSingleMovies;
-  final OutputBoundary getSingleMoviesPresenter;
+  final InputBoundary getMoviesUseCase;
+  final OutputBoundary getMoviesPresenter;
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
-
+  final Widget listMoreMoviesWidget;
   const SingleMoviesWidget(
-      this.title, this.getSingleMovies, this.getSingleMoviesPresenter, this.getDetailMovies, this.getDetailMoviesPresenter, {super.key});
+      this.getMoviesUseCase,
+      this.getMoviesPresenter,
+      this.getDetailMovies,
+      this.getDetailMoviesPresenter,
+      this.listMoreMoviesWidget,
+      {super.key});
 
   @override
   State<SingleMoviesWidget> createState() => _SingleMoviesWidgetState();
@@ -23,20 +27,12 @@ class SingleMoviesWidget extends StatefulWidget {
 
 class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
   List<Movies> data = [];
-  int currentPage = 1;
-  bool isLoadingMore = false;
-  bool hasMoreData = true;  // To check if there is more data to load
-  final ScrollController _scrollController = ScrollController();
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    fetchSingleMoviesData(currentPage);
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 100 && !isLoadingMore && hasMoreData) {
-        loadMoreMovies();
-      }
-    });
+    fetchMoviesData();
   }
 
   @override
@@ -45,33 +41,37 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text(
-            widget.title,
-            style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Đẩy 2 bên ra 2 đầu
+            children: [
+              const Text(
+                "Phim Lẻ",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => widget.listMoreMoviesWidget));
+                  print("Xem Thêm được nhấn");
+                },
+                child: const Text(
+                  "Xem Thêm",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(
           height: 230,
-          child: ListView.builder(
-            controller: _scrollController,
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : data.isEmpty
+              ? const Center(child: Text("Không có dữ liệu", style: TextStyle(color: Colors.white)))
+              : ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: data.length + (isLoadingMore ? 1 : 0),  // Show loading indicator at the end
-            itemBuilder: (context, index) {
-              if (index == data.length && isLoadingMore) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                  ),
-                );
-              }
-              return buildMovieCard(data[index]);
-            },
+            itemCount: data.length,
+            itemBuilder: (context, index) => buildMovieCard(data[index]),
           ),
         ),
       ],
@@ -80,43 +80,34 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
 
   Widget buildMovieCard(Movies movie) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailMovieWidget(movie, widget.getDetailMovies, widget.getDetailMoviesPresenter),
-          ),
-        );
-      },
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailMovieWidget(
+              movie, widget.getDetailMovies, widget.getDetailMoviesPresenter),
+        ),
+      ),
       child: Container(
         width: 130,
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: Image.network(
-                '${movie.posterUrl}',
+                movie.posterUrl,
                 height: 180,
                 width: 130,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return shimmerLoadingEffect(130, 180);
-                },
+                loadingBuilder: (context, child, loadingProgress) =>
+                loadingProgress == null ? child : shimmerLoadingEffect(),
               ),
             ),
-            SizedBox(height: 6.0),
             Text(
               movie.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
+              style: const TextStyle(fontSize: 14, color: Colors.white),
             ),
           ],
         ),
@@ -124,49 +115,31 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
     );
   }
 
-  Widget shimmerLoadingEffect(double width, double height) {
+  Widget shimmerLoadingEffect() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[800]!,
       highlightColor: Colors.grey[600]!,
       child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
+        width: 130,
+        height: 180,
+        color: Colors.black,
       ),
     );
   }
 
-  void fetchSingleMoviesData(int page) async {
-    if (isLoadingMore) return;
-
-    setState(() => isLoadingMore = true);
-    var requestData = GetMovieListRequestData(APP_DOMAIN_API_DS_PHIM_LE,page);
-    await widget.getSingleMovies.execute(requestData);
-
+  void fetchMoviesData() async {
+    setState(() => isLoading = true);
+    var requestData = GetMovieListRequestData(
+        APP_DOMAIN_API_DS_PHIM_LE, APP_DEFAULT_PAGE, APP_DEFAULT_ITEM_PER_PAGE_HOME);
+    await widget.getMoviesUseCase.execute(requestData);
     setState(() {
-      if (page == 1) data.clear();  // Clear existing data on the first page
-      data.addAll(widget.getSingleMoviesPresenter.getData());
-      isLoadingMore = false;
-      // Check if there's more data to load
-      if (widget.getSingleMoviesPresenter.getData().isEmpty) {
-        hasMoreData = false;
-      }
+      data = widget.getMoviesPresenter.getData();
+      isLoading = false;
     });
-  }
-
-  void loadMoreMovies() {
-    if (hasMoreData) {
-      currentPage++;
-      fetchSingleMoviesData(currentPage);
-    }
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
   }
 }

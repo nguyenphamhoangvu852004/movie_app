@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
-import 'package:movie_app/data/DetailMovies.dart';
-import 'package:movie_app/data/Movies.dart';
 import 'package:movie_app/features/getDetailMovies/GetDetailMovieRequestData.dart';
 import 'package:movie_app/ui/components/VideoPlayerScreen.dart';
+
+import '../../model/DetailMovies.dart';
+import '../../model/Movies.dart';
 
 class DetailMovieWidget extends StatefulWidget {
   final Movies movie;

@@ -1,4 +1,5 @@
-import 'package:movie_app/data/ServerData.dart';
+
+import 'ServerData.dart';
 
 class Episode {
   String _serverName;

@@ -20,7 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
           end: Alignment.bottomCenter,
           colors: [
             Colors.black,
-            Colors.pinkAccent,
+            Colors.brown
+            ,
           ],
         ),
       ),
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
           widget.newMoviesWidget,
           widget.singleMoviesWidget,
           widget.seriesMoviesWidget,
+
         ],
       ),
     );

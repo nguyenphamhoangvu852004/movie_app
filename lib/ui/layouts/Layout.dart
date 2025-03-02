@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/data/Movies.dart';
+import 'package:movie_app/model/Movies.dart';
 
 class Layout extends StatefulWidget {
   final Widget homeScreen;

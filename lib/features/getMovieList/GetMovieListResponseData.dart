@@ -1,5 +1,5 @@
 import 'package:movie_app/constants/interfaces/ResponseData.dart';
-import 'package:movie_app/data/Movies.dart';
+import 'package:movie_app/model/Movies.dart';
 
 class GetMovieListResponseData implements ResponseData  {
 

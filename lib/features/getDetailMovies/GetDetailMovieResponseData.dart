@@ -1,5 +1,5 @@
 import 'package:movie_app/constants/interfaces/ResponseData.dart';
-import 'package:movie_app/data/DetailMovies.dart';
+import 'package:movie_app/model/DetailMovies.dart';
 
 class GetDetailMovieResponseData implements ResponseData{
   DetailMovies _detailMovies;

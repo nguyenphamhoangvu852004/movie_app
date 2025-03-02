@@ -1,7 +1,9 @@
 
 
-import 'package:movie_app/data/Category.dart';
-import 'package:movie_app/data/Country.dart';
+
+
+import 'package:movie_app/model/Category.dart';
+import 'package:movie_app/model/Country.dart';
 
 class Movies {
   String _id;

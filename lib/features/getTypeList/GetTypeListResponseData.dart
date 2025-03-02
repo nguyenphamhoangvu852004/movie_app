@@ -1,6 +1,6 @@
 import 'package:movie_app/constants/interfaces/ResponseData.dart';
 
-import '../../data/Category.dart';
+import '../../model/Category.dart';
 
 class GetTypeListResponseData implements ResponseData{
   List<Category> _typeList;

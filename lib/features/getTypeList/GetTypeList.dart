@@ -4,8 +4,7 @@ import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/constants/interfaces/RequestData.dart';
-import 'package:movie_app/data/Category.dart';
-import 'package:movie_app/features/getTypeList/GetTypeListRequestData.dart';
+import 'package:movie_app/model/Category.dart';
 import 'package:movie_app/features/getTypeList/GetTypeListResponseData.dart';
 import 'package:http/http.dart' as http;
 class GetTypeList implements InputBoundary {

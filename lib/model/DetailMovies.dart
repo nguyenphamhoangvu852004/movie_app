@@ -1,5 +1,6 @@
-import 'package:movie_app/data/Episode.dart';
-import 'package:movie_app/data/Movies.dart';
+
+import 'Episode.dart';
+import 'Movies.dart';
 
 class DetailMovies {
   Movies _movies;

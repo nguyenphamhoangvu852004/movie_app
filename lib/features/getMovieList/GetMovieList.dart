@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/constants/interfaces/RequestData.dart';
-import 'package:movie_app/data/Category.dart';
-import 'package:movie_app/data/Country.dart';
+import 'package:movie_app/model/Category.dart';
+import 'package:movie_app/model/Country.dart';
 import 'package:movie_app/features/getMovieList/GetMovieListRequestData.dart';
 
-import '../../data/Movies.dart';
+import '../../model/Movies.dart';
 import 'package:http/http.dart' as http;
 
 import 'GetMovieListResponseData.dart';
@@ -23,7 +23,8 @@ class GetMovieList implements InputBoundary {
       List<Movies> listData = [];
       String appDomain = requestData.domainStr;
       int page = requestData.page;
-      String url = "$appDomain?page=$page";
+      int limit = requestData.limit;
+      String url = "$appDomain?page=$page&limit=$limit";
 
       try {
         var response = await http.get(Uri.parse(url));
@@ -44,7 +45,6 @@ class GetMovieList implements InputBoundary {
                 for (var category in item["category"]) {
                   categoryList.add(Category(
                     category["id"]?.toString() ?? "",
-                    // API dùng "id" thay vì "_id"
                     category["name"]?.toString() ?? "",
                     category["slug"]?.toString() ?? "",
                   ));
@@ -58,7 +58,6 @@ class GetMovieList implements InputBoundary {
                 for (var country in item["country"]) {
                   countryList.add(Country(
                     country["id"]?.toString() ?? "",
-                    // API dùng "id" thay vì "_id"
                     country["name"]?.toString() ?? "",
                     country["slug"]?.toString() ?? "",
                   ));
@@ -93,6 +92,9 @@ class GetMovieList implements InputBoundary {
           }
           var responseData = GetMovieListResponseData(listData);
           _presenter.execute(responseData);
+          for (var movie in listData) {
+            print('Movie${movie.id}: ${movie.name}');
+          }
         } else {
           throw Exception("API failed with status: ${response.statusCode}");
         }

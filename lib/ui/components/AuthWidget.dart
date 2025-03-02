@@ -1,13 +1,8 @@
-
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/features/authentication/AuthRepo/AuthRepoImp.dart';
 
-import 'package:flutter/material.dart';
-
-import '../../data/AuthResult.dart';
 import '../../features/authentication/AuthRepo/AuthRepo.dart';
+import '../../model/AuthResult.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({super.key});
