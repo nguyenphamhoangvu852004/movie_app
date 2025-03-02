@@ -1,0 +1,2 @@
+/home/nguyenvu/Documents/DART/movie_app/android/app/.cxx/Debug/12x1v693/x86_64/CMakeFiles/edit_cache.dir
+/home/nguyenvu/Documents/DART/movie_app/android/app/.cxx/Debug/12x1v693/x86_64/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/home/nguyenvu/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/nguyenvu/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/nguyenvu/Documents/DART/movie_app/android/app/.cxx/Debug/12x1v693/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/nguyenvu/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/nguyenvu/Documents/DART/movie_app/android/app/.cxx/Debug/12x1v693/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
