@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/features/getNewMovies/GetNewMoviesRequestData.dart';
-import 'package:movie_app/ui/components/DetailMovieWidget.dart';
 import 'dart:async';
 
 import '../../model/Movies.dart';
@@ -12,11 +11,8 @@ class NewMoviesWidget extends StatefulWidget {
 
   final InputBoundary getNewMovies;
   final OutputBoundary getNewMoviesPresenter;
-  final InputBoundary getDetailMovies;
-  final OutputBoundary getDetailMoviesPresenter;
 
-  const NewMoviesWidget(this.getNewMovies, this.getNewMoviesPresenter,
-      this.getDetailMovies, this.getDetailMoviesPresenter, {super.key});
+  const NewMoviesWidget(this.getNewMovies, this.getNewMoviesPresenter,{super.key});
 
   @override
   State<NewMoviesWidget> createState() => _NewMoviesWidgetState();
@@ -75,16 +71,7 @@ class _NewMoviesWidgetState extends State<NewMoviesWidget> {
               final Movies movie = data[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailMovieWidget(
-                        movie,
-                        widget.getDetailMovies,
-                        widget.getDetailMoviesPresenter,
-                      ),
-                    ),
-                  );
+                  // tab
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),

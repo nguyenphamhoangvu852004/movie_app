@@ -23,24 +23,12 @@ void main() async {
   var getDetailPresenter = GetDetailMoviePresenter();
   var getDetailMovie = GetDetailMovie(getDetailPresenter);
 
-  // widget load thêm phim lẻ
-  var listMoreSingleMoviesWidgetPresenter = GetMovieListPresenter();
-  var listMoreSingleMoviesWidgetUseCase = GetMovieList(listMoreSingleMoviesWidgetPresenter);
-  var listMoreSingleMoviesWidget = ListMoreMoviesWidget(listMoreSingleMoviesWidgetUseCase, listMoreSingleMoviesWidgetPresenter, getDetailMovie, getDetailPresenter);
-
   // phim lẻ
   var getSingleMoviesPresenter = GetMovieListPresenter();
   var getSingleMovies = GetMovieList(getSingleMoviesPresenter);
   var singleMoviesWidget = SingleMoviesWidget( getSingleMovies,
       getSingleMoviesPresenter, getDetailMovie, getDetailPresenter,
-      listMoreSingleMoviesWidget);
-
-
-  // widget load thêm phim lẻ
-  var listMoreSeriesMoviesWidgetPresenter = GetMovieListPresenter();
-  var listMoreSeriesMoviesWidgetUseCase = GetMovieList(listMoreSeriesMoviesWidgetPresenter);
-  var listMoreSeriesMoviesWidget = ListMoreMoviesWidget(listMoreSeriesMoviesWidgetUseCase, listMoreSeriesMoviesWidgetPresenter, getDetailMovie, getDetailPresenter);
-
+      );
 
   // phim bộ
   var getSeriesPresenter = GetMovieListPresenter();
@@ -53,9 +41,7 @@ void main() async {
   var getNewMovies = GetNewMovies(getNewMoviesPresenter);
 
   var newMoviesWidget = NewMoviesWidget(getNewMovies,
-      getNewMoviesPresenter, getDetailMovie, getDetailPresenter);
-
-
+      getNewMoviesPresenter);
 
   // trong Home Screen có các widget
   final homeScreen = HomeScreen(singleMoviesWidget, seriesMoviesWidget, newMoviesWidget );

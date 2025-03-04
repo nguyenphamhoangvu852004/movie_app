@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/constants/interfaces/InputBoundary.dart';
-import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/features/authentication/AuthRepo/AuthRepoImp.dart';
 import 'package:movie_app/ui/components/AuthWidget.dart';
 import 'package:movie_app/ui/screens/UserScreen.dart';
 
 class WidgetTree extends StatefulWidget {
+  const WidgetTree({super.key});
+
   @override
   State<WidgetTree> createState() => _WidgetTreeState();
 }

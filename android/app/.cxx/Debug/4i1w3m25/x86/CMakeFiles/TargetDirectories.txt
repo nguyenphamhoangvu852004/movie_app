@@ -1,0 +1,2 @@
+C:/Users/nphv8/Documents/DART/movie_app/android/app/.cxx/Debug/4i1w3m25/x86/CMakeFiles/edit_cache.dir
+C:/Users/nphv8/Documents/DART/movie_app/android/app/.cxx/Debug/4i1w3m25/x86/CMakeFiles/rebuild_cache.dir

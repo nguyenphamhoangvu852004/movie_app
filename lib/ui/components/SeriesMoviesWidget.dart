@@ -2,22 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
+import 'package:movie_app/ui/components/ListMoreMoviesWidget.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../features/getMovieList/GetMovieListRequestData.dart';
 import '../../model/Movies.dart';
 import 'DetailMovieWidget.dart';
-
 
 class SeriesMoviesWidget extends StatefulWidget {
   final InputBoundary getMoviesUseCase;
   final OutputBoundary getMoviesPresenter;
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
-  const SeriesMoviesWidget(
-      this.getMoviesUseCase,
-      this.getMoviesPresenter,
-      this.getDetailMovies,
-      this.getDetailMoviesPresenter,
+  const SeriesMoviesWidget(this.getMoviesUseCase, this.getMoviesPresenter,
+      this.getDetailMovies, this.getDetailMoviesPresenter,
       {super.key});
 
   @override
@@ -42,7 +39,7 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Đẩy 2 bên ra 2 đầu
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
                 "Phim Bộ",
@@ -50,9 +47,18 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  // Thêm logic khi nhấn "Xem Thêm" nếu cần
-                  print("Xem Thêm được nhấn");
-                  // Navigator.push( context, MaterialPageRoute(builder: (context) => ListMoreMovieScreen(ListMoreMovieWidget())));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ListMoreMoviesWidget(
+                        widget.getMoviesUseCase,
+                        widget.getMoviesPresenter,
+                        widget.getDetailMovies,
+                        widget.getDetailMoviesPresenter,
+                        APP_DOMAIN_API_DS_PHIM_BO,
+                      ),
+                    ),
+                  );
                 },
                 child: const Text(
                   "Xem Thêm",
@@ -67,7 +73,8 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
           child: isLoading
               ? const Center(child: CircularProgressIndicator())
               : data.isEmpty
-              ? const Center(child: Text("Không có dữ liệu", style: TextStyle(color: Colors.white)))
+              ? const Center(
+              child: Text("Không có dữ liệu", style: TextStyle(color: Colors.white)))
               : ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: data.length,
@@ -84,7 +91,8 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
         context,
         MaterialPageRoute(
           builder: (context) => DetailMovieWidget(
-              movie, widget.getDetailMovies, widget.getDetailMoviesPresenter),
+            movie, widget.getDetailMovies, widget.getDetailMoviesPresenter,
+          ),
         ),
       ),
       child: Container(
@@ -136,10 +144,5 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
       data = widget.getMoviesPresenter.getData();
       isLoading = false;
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

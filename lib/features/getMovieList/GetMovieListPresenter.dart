@@ -13,5 +13,6 @@ class GetMovieListPresenter implements OutputBoundary {
     }
   }
 
+  @override
   List<Movies> getData() => list;
 }

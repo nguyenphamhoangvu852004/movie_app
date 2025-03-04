@@ -109,6 +109,6 @@ class GetMovieList implements InputBoundary {
     if (url.startsWith('http')) {
       return url;
     }
-    return "https://phimimg.com/" + url; // Dùng APP_DOMAIN_CDN_IMAGE từ API
+    return "https://phimimg.com/$url"; // Dùng APP_DOMAIN_CDN_IMAGE từ API
   }
 }
