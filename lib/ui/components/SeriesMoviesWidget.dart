@@ -4,6 +4,7 @@ import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/data/Movies.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../features/favoritesMovie/interface/FavoriteMovieInput.dart';
 import '../../features/getMovieList/GetMovieListRequestData.dart';
 import 'DetailMovieWidget.dart';
 
@@ -14,8 +15,22 @@ class SeriesMoviesWidget extends StatefulWidget {
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
 
+  final InputBoundary addMovieFavorite;
+  final InputBoundary isMovieFavorite;
+  final InputBoundary removeMovieFavorite;
+  final OutputBoundary isFavoriteMoviePresenter;
+
   const SeriesMoviesWidget(
-      this.title, this.getSeriesMovies, this.getSeriesMoviesPresenter, this.getDetailMovies, this.getDetailMoviesPresenter, {super.key});
+      this.title,
+      this.getSeriesMovies,
+      this.getSeriesMoviesPresenter,
+      this.getDetailMovies,
+      this.getDetailMoviesPresenter,
+      this.addMovieFavorite,
+      this.isMovieFavorite,
+      this.removeMovieFavorite,
+      this.isFavoriteMoviePresenter,
+      {super.key});
 
   @override
   State<SeriesMoviesWidget> createState() => _SeriesMoviesWidgetState();
@@ -85,7 +100,14 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
           context,
           MaterialPageRoute(
             builder: (context) => DetailMovieWidget(
-                movie, widget.getDetailMovies, widget.getDetailMoviesPresenter),
+                movie,
+                widget.getDetailMovies,
+                widget.getDetailMoviesPresenter,
+                widget.addMovieFavorite,
+                widget.isMovieFavorite,
+                widget.removeMovieFavorite,
+                widget.isFavoriteMoviePresenter,
+            ),
           ),
         );
       },

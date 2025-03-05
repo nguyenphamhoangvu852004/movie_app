@@ -3,16 +3,32 @@ import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/data/DetailMovies.dart';
 import 'package:movie_app/data/Movies.dart';
+import 'package:movie_app/features/favoritesMovie/data/FavoriteRequest.dart';
+import 'package:movie_app/features/favoritesMovie/data/IsFavoriteRequest.dart';
+import 'package:movie_app/features/favoritesMovie/interface/FavoriteMovieInput.dart';
 import 'package:movie_app/features/getDetailMovies/GetDetailMovieRequestData.dart';
 import 'package:movie_app/ui/components/VideoPlayerScreen.dart';
+
+import '../../data/datasource/MovieLocalDataSource.dart';
 
 class DetailMovieWidget extends StatefulWidget {
   final Movies movie;
   final InputBoundary getDetailMovie;
   final OutputBoundary getDetailMoviePresenter;
+  final InputBoundary addMovieFavorite;
+  final InputBoundary isMovieFavorite;
+  final InputBoundary removeMovieFavorite;
+  final OutputBoundary isFavoriteMoviePresenter;
 
   const DetailMovieWidget(
-      this.movie, this.getDetailMovie, this.getDetailMoviePresenter, {super.key});
+      this.movie,
+      this.getDetailMovie,
+      this.getDetailMoviePresenter,
+      this.addMovieFavorite,
+      this.isMovieFavorite,
+      this.removeMovieFavorite,
+      this.isFavoriteMoviePresenter,
+      {super.key});
 
   @override
   _DetailMovieWidgetState createState() => _DetailMovieWidgetState();
@@ -20,11 +36,13 @@ class DetailMovieWidget extends StatefulWidget {
 
 class _DetailMovieWidgetState extends State<DetailMovieWidget> {
   DetailMovies? detailMovie;
+  bool isFavorite = false;
 
   @override
   void initState() {
     super.initState();
     fetchDetailMovieData();
+    _checkIfFavorite();
   }
 
   @override
@@ -52,6 +70,15 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
       backgroundColor: Colors.transparent,
       expandedHeight: 450.0,
       pinned: true,
+      actions: [
+        IconButton(
+          icon: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: isFavorite ? Colors.red : Colors.white,
+          ),
+          onPressed: _toggleFavorite,
+        ),
+      ],
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,
@@ -362,4 +389,32 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
       detailMovie = data;
     });
   }
+
+  void _toggleFavorite() async {
+    var request = FavoriteRequest(widget.movie);
+    // print(widget.movie);
+
+    if (isFavorite) {
+      await widget.removeMovieFavorite.execute(request);
+    } else {
+      await widget.addMovieFavorite.execute(request);
+    }
+
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+  }
+
+
+  void _checkIfFavorite() async {
+    var request = IsFavoriteRequest(widget.movie.id);
+    await widget.isMovieFavorite.execute(request);
+
+    bool result = widget.isFavoriteMoviePresenter.getData();
+
+    setState(() {
+      isFavorite = result;
+    });
+  }
+
 }

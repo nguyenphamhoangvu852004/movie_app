@@ -4,7 +4,8 @@ import 'package:movie_app/data/Movies.dart';
 class Layout extends StatefulWidget {
   final Widget homeScreen;
   final Widget widgetTree;
-  const Layout(this.homeScreen,this.widgetTree, {super.key});
+  final Widget favorite;
+  const Layout(this.homeScreen,this.widgetTree, this.favorite, {super.key});
   @override
   State<Layout> createState() => _LayoutState();
 }
@@ -23,7 +24,7 @@ class _LayoutState extends State<Layout> {
     final tabs = [
       widget.homeScreen,
       Container(child: Text("Tap2")),
-      Container(child: Text("Tap3")),
+      widget.favorite,
       widget.widgetTree
     ];
 

@@ -5,6 +5,7 @@ import 'package:movie_app/data/Movies.dart';
 import 'package:movie_app/features/getMovieList/GetMovieListRequestData.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../constants/interfaces/InputBoundary.dart';
+import '../../features/favoritesMovie/interface/FavoriteMovieInput.dart';
 import 'DetailMovieWidget.dart';
 
 class SingleMoviesWidget extends StatefulWidget {
@@ -14,8 +15,22 @@ class SingleMoviesWidget extends StatefulWidget {
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
 
+  final InputBoundary addMovieFavorite;
+  final InputBoundary isMovieFavorite;
+  final InputBoundary removeMovieFavorite;
+  final OutputBoundary isFavoriteMoviePresenter;
+
   const SingleMoviesWidget(
-      this.title, this.getSingleMovies, this.getSingleMoviesPresenter, this.getDetailMovies, this.getDetailMoviesPresenter, {super.key});
+      this.title,
+      this.getSingleMovies,
+      this.getSingleMoviesPresenter,
+      this.getDetailMovies,
+      this.getDetailMoviesPresenter,
+      this.addMovieFavorite,
+      this.isMovieFavorite,
+      this.removeMovieFavorite,
+      this.isFavoriteMoviePresenter,
+      {super.key});
 
   @override
   State<SingleMoviesWidget> createState() => _SingleMoviesWidgetState();
@@ -84,7 +99,15 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailMovieWidget(movie, widget.getDetailMovies, widget.getDetailMoviesPresenter),
+            builder: (context) => DetailMovieWidget(
+                movie,
+                widget.getDetailMovies,
+                widget.getDetailMoviesPresenter,
+                widget.addMovieFavorite,
+                widget.isMovieFavorite,
+                widget.removeMovieFavorite,
+                widget.isFavoriteMoviePresenter,
+            ),
           ),
         );
       },

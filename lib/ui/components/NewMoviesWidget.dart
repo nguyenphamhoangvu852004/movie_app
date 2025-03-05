@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/data/Movies.dart';
+import 'package:movie_app/features/favoritesMovie/interface/FavoriteMovieInput.dart';
 import 'package:movie_app/features/getNewMovies/GetNewMoviesRequestData.dart';
 import 'package:movie_app/ui/components/DetailMovieWidget.dart';
 import 'dart:async';
@@ -14,8 +15,22 @@ class NewMoviesWidget extends StatefulWidget {
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
 
-  const NewMoviesWidget(this.title, this.getNewMovies, this.getNewMoviesPresenter,
-      this.getDetailMovies, this.getDetailMoviesPresenter, {super.key});
+  final InputBoundary addMovieFavorite;
+  final InputBoundary isMovieFavorite;
+  final InputBoundary removeMovieFavorite;
+  final OutputBoundary isFavoriteMoviePresenter;
+
+  const NewMoviesWidget(
+      this.title,
+      this.getNewMovies,
+      this.getNewMoviesPresenter,
+      this.getDetailMovies,
+      this.getDetailMoviesPresenter,
+      this.addMovieFavorite,
+      this.isMovieFavorite,
+      this.removeMovieFavorite,
+      this.isFavoriteMoviePresenter,
+      {super.key});
 
   @override
   State<NewMoviesWidget> createState() => _NewMoviesWidgetState();
@@ -81,6 +96,10 @@ class _NewMoviesWidgetState extends State<NewMoviesWidget> {
                         movie,
                         widget.getDetailMovies,
                         widget.getDetailMoviesPresenter,
+                        widget.addMovieFavorite,
+                        widget.isMovieFavorite,
+                        widget.removeMovieFavorite,
+                        widget.isFavoriteMoviePresenter,
                       ),
                     ),
                   );
