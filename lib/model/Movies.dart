@@ -46,6 +46,27 @@ class Movies {
     _id = value;
   }
 
+  factory Movies.fromMap(Map<String, dynamic> map) {
+    return Movies(
+        map['id'].toString(),
+        map['_name'] ?? "Unknown",
+        map['_slug'] ?? "",
+        map['_originName'] ?? "",
+        map['_type'] ?? "",
+        map['_posterUrl'] ?? "",
+        map['_thumbUrl'] ?? "",
+        (map['_subDocQuyen'] == 1),
+        (map['_chieuRap'] == 1),
+        map['_time'] ?? "",
+        map['_episodeCurrent'] ?? "",
+        map['_qualiry'] ?? "",
+        map['_lang'] ?? "",
+        map['_year'] ?? 0,
+        [],
+        []
+    );
+  }
+
   @override
   String toString() {
     return 'Movies{_id: $_id, _name: $_name, _slug: $_slug, _originName: $_originName, _type: $_type, _posterUrl: $_posterUrl, _thumbUrl: $_thumbUrl, _subDocQuyen: $_subDocQuyen, _chieuRap: $_chieuRap, _time: $_time, _episodeCurrent: $_episodeCurrent, _qualiry: $_qualiry, _lang: $_lang, _year: $_year}';

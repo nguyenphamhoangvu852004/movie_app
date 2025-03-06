@@ -15,8 +15,17 @@ class ListMoreMoviesWidget extends StatefulWidget {
   final OutputBoundary getDetailMoviesPresenter;
   final String slug;
 
-  const ListMoreMoviesWidget(this.getMoviesUseCase, this.getMoviesPresenter,
-      this.getDetailMoviesUseCase, this.getDetailMoviesPresenter, this.slug,
+  // final InputBoundary addMovieFavorite;
+  // final InputBoundary isMovieFavorite;
+  // final InputBoundary removeMovieFavorite;
+  // final OutputBoundary isFavoriteMoviePresenter;
+
+  const ListMoreMoviesWidget(
+      this.getMoviesUseCase,
+      this.getMoviesPresenter,
+      this.getDetailMoviesUseCase,
+      this.getDetailMoviesPresenter,
+      this.slug,
       {super.key});
 
   @override
