@@ -14,15 +14,19 @@ class DetailMovieWidget extends StatefulWidget {
   final InputBoundary getDetailMovie;
   final OutputBoundary getDetailMoviePresenter;
 
-  // final InputBoundary addMovieFavorite;
-  // final InputBoundary isMovieFavorite;
-  // final InputBoundary removeMovieFavorite;
-  // final OutputBoundary isFavoriteMoviePresenter;
+  final InputBoundary addMovieFavorite;
+  final InputBoundary isMovieFavorite;
+  final InputBoundary removeMovieFavorite;
+  final OutputBoundary isFavoriteMoviePresenter;
 
   const DetailMovieWidget(
       this.movie,
       this.getDetailMovie,
       this.getDetailMoviePresenter,
+      this.addMovieFavorite,
+      this.isMovieFavorite,
+      this.removeMovieFavorite,
+      this.isFavoriteMoviePresenter,
       {super.key});
 
   @override
@@ -386,29 +390,29 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
   }
 
   void _toggleFavorite() async {
-    // var request = FavoriteRequest(widget.movie);
-    // // print(widget.movie);
-    //
-    // if (isFavorite) {
-    //   await widget.removeMovieFavorite.execute(request);
-    // } else {
-    //   await widget.addMovieFavorite.execute(request);
-    // }
-    //
-    // setState(() {
-    //   isFavorite = !isFavorite;
-    // });
+    var request = FavoriteRequest(widget.movie);
+    // print(widget.movie);
+
+    if (isFavorite) {
+      await widget.removeMovieFavorite.execute(request);
+    } else {
+      await widget.addMovieFavorite.execute(request);
+    }
+
+    setState(() {
+      isFavorite = !isFavorite;
+    });
   }
 
 
   void _checkIfFavorite() async {
-    // var request = IsFavoriteRequest(widget.movie.id);
-    // await widget.isMovieFavorite.execute(request);
-    //
-    // bool result = widget.isFavoriteMoviePresenter.getData();
-    //
-    // setState(() {
-    //   isFavorite = result;
-    // });
+    var request = IsFavoriteRequest(widget.movie.id);
+    await widget.isMovieFavorite.execute(request);
+
+    bool result = widget.isFavoriteMoviePresenter.getData();
+
+    setState(() {
+      isFavorite = result;
+    });
   }
 }
