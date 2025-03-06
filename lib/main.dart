@@ -58,7 +58,13 @@ void main() async {
       getFavoriteMovie,
       getFavoriteMoviePresenter,
       removeFavoriteMovie,
-      favoriteMoviePresenter);
+      favoriteMoviePresenter,
+      getDetailMovie,
+      getDetailPresenter,
+      addMovieFavorite,
+      isMovieFavorite,
+      isFavoriteMoviePresenter
+  );
 
   // phim lẻ
   var getSingleMoviesPresenter = GetMovieListPresenter();
