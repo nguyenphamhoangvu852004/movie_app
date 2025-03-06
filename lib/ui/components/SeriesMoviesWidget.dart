@@ -14,13 +14,20 @@ class SeriesMoviesWidget extends StatefulWidget {
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
 
-  // final InputBoundary addMovieFavorite;
-  // final InputBoundary isMovieFavorite;
-  // final InputBoundary removeMovieFavorite;
-  // final OutputBoundary isFavoriteMoviePresenter;
+  final InputBoundary addMovieFavorite;
+  final InputBoundary isMovieFavorite;
+  final InputBoundary removeMovieFavorite;
+  final OutputBoundary isFavoriteMoviePresenter;
 
-  const SeriesMoviesWidget(this.getMoviesUseCase, this.getMoviesPresenter,
-      this.getDetailMovies, this.getDetailMoviesPresenter,
+  const SeriesMoviesWidget(
+      this.getMoviesUseCase,
+      this.getMoviesPresenter,
+      this.getDetailMovies,
+      this.getDetailMoviesPresenter,
+      this.addMovieFavorite,
+      this.isMovieFavorite,
+      this.removeMovieFavorite,
+      this.isFavoriteMoviePresenter,
       {super.key});
 
   @override
@@ -62,6 +69,10 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
                         widget.getDetailMovies,
                         widget.getDetailMoviesPresenter,
                         APP_DOMAIN_API_DS_PHIM_BO,
+                        widget.addMovieFavorite,
+                        widget.isMovieFavorite,
+                        widget.removeMovieFavorite,
+                        widget.isFavoriteMoviePresenter
                       ),
                     ),
                   );
@@ -97,7 +108,13 @@ class _SeriesMoviesWidgetState extends State<SeriesMoviesWidget> {
         context,
         MaterialPageRoute(
           builder: (context) => DetailMovieWidget(
-            movie, widget.getDetailMovies, widget.getDetailMoviesPresenter,
+            movie,
+            widget.getDetailMovies,
+            widget.getDetailMoviesPresenter,
+            widget.addMovieFavorite,
+            widget.isMovieFavorite,
+            widget.removeMovieFavorite,
+            widget.isFavoriteMoviePresenter
           ),
         ),
       ),

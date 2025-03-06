@@ -14,13 +14,20 @@ class SingleMoviesWidget extends StatefulWidget {
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
 
-  // final InputBoundary addMovieFavorite;
-  // final InputBoundary isMovieFavorite;
-  // final InputBoundary removeMovieFavorite;
-  // final OutputBoundary isFavoriteMoviePresenter;
+  final InputBoundary addMovieFavorite;
+  final InputBoundary isMovieFavorite;
+  final InputBoundary removeMovieFavorite;
+  final OutputBoundary isFavoriteMoviePresenter;
 
-  const SingleMoviesWidget(this.getMoviesUseCase, this.getMoviesPresenter,
-      this.getDetailMovies, this.getDetailMoviesPresenter,
+  const SingleMoviesWidget(
+      this.getMoviesUseCase,
+      this.getMoviesPresenter,
+      this.getDetailMovies,
+      this.getDetailMoviesPresenter,
+      this.addMovieFavorite,
+      this.isMovieFavorite,
+      this.removeMovieFavorite,
+      this.isFavoriteMoviePresenter,
       {super.key});
 
   @override
@@ -65,7 +72,12 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
                               widget.getMoviesPresenter,
                               widget.getDetailMovies,
                               widget.getDetailMoviesPresenter,
-                              APP_DOMAIN_API_DS_PHIM_LE)));
+                              APP_DOMAIN_API_DS_PHIM_LE,
+                              widget.addMovieFavorite,
+                              widget.isMovieFavorite,
+                              widget.removeMovieFavorite,
+                              widget.isFavoriteMoviePresenter
+                          )));
                   print("Xem Thêm được nhấn");
                 },
                 child: const Text(
@@ -101,7 +113,14 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
         context,
         MaterialPageRoute(
           builder: (context) => DetailMovieWidget(
-              movie, widget.getDetailMovies, widget.getDetailMoviesPresenter),
+              movie,
+              widget.getDetailMovies,
+              widget.getDetailMoviesPresenter,
+              widget.addMovieFavorite,
+              widget.isMovieFavorite,
+              widget.removeMovieFavorite,
+              widget.isFavoriteMoviePresenter,
+          ),
         ),
       ),
       child: Container(

@@ -15,10 +15,10 @@ class ListMoreMoviesWidget extends StatefulWidget {
   final OutputBoundary getDetailMoviesPresenter;
   final String slug;
 
-  // final InputBoundary addMovieFavorite;
-  // final InputBoundary isMovieFavorite;
-  // final InputBoundary removeMovieFavorite;
-  // final OutputBoundary isFavoriteMoviePresenter;
+  final InputBoundary addMovieFavorite;
+  final InputBoundary isMovieFavorite;
+  final InputBoundary removeMovieFavorite;
+  final OutputBoundary isFavoriteMoviePresenter;
 
   const ListMoreMoviesWidget(
       this.getMoviesUseCase,
@@ -26,6 +26,10 @@ class ListMoreMoviesWidget extends StatefulWidget {
       this.getDetailMoviesUseCase,
       this.getDetailMoviesPresenter,
       this.slug,
+      this.addMovieFavorite,
+      this.isMovieFavorite,
+      this.removeMovieFavorite,
+      this.isFavoriteMoviePresenter,
       {super.key});
 
   @override
@@ -122,7 +126,12 @@ class _ListMoreMoviesWidgetState extends State<ListMoreMoviesWidget> {
                           builder: (context) => DetailMovieWidget(
                               filteredData[index],
                               widget.getDetailMoviesUseCase,
-                              widget.getDetailMoviesPresenter),
+                              widget.getDetailMoviesPresenter,
+                              widget.addMovieFavorite,
+                              widget.isMovieFavorite,
+                              widget.removeMovieFavorite,
+                              widget.isFavoriteMoviePresenter
+                          ),
                         ),
                       );
                     },

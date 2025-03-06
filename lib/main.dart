@@ -12,12 +12,36 @@ import 'package:movie_app/features/getDetailMovies/GetDetailMovie.dart';
 import 'package:movie_app/features/getDetailMovies/GetDetailMoviePresenter.dart';
 import 'package:movie_app/features/getNewMovies/GetNewMoviesPresenter.dart';
 import 'package:movie_app/ui/screens/HomeScreen.dart';
+import 'data/datasource/MovieLocalDataSource.dart';
+import 'data/repository/MovieRepositoryImpl.dart';
+import 'features/favoritesMovie/addFavorite/AddFavoriteMovieUseCase.dart';
+import 'features/favoritesMovie/addFavorite/FavoriteMoviePresenter.dart';
+import 'features/favoritesMovie/isFavorite/IsFavoriteMoviePresenter.dart';
+import 'features/favoritesMovie/isFavorite/IsFavoriteMovieUseCase.dart';
+import 'features/favoritesMovie/removeFavorite/RemoveFavoriteMovieUseCase.dart';
 import 'ui/components/WidgetTree.dart';
 import 'features/getMovieList/GetMovieListPresenter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  // Database SQL lite
+  var database = MovieLocalDataSource();
+
+  // Favorite Repository
+  var repository = MovieRepositoryImpl(database);
+
+  // Presenter
+  var favoriteMoviePresenter = FavoriteMoviePresenter(); // add remove
+  var isFavoriteMoviePresenter = IsFavoriteMoviePresenter(); // check
+
+  // UseCase
+  var isMovieFavorite = IsFavoriteMovieUseCase(isFavoriteMoviePresenter, repository);
+  var addMovieFavorite = AddFavoriteMovieUseCase(favoriteMoviePresenter, repository);
+  var removeFavoriteMovie = RemoveFavoriteMovieUseCase(favoriteMoviePresenter, repository);
+
+
 
   // chi tiet phim
   var getDetailPresenter = GetDetailMoviePresenter();
@@ -26,15 +50,30 @@ void main() async {
   // phim lẻ
   var getSingleMoviesPresenter = GetMovieListPresenter();
   var getSingleMovies = GetMovieList(getSingleMoviesPresenter);
-  var singleMoviesWidget = SingleMoviesWidget( getSingleMovies,
-      getSingleMoviesPresenter, getDetailMovie, getDetailPresenter,
-      );
+  var singleMoviesWidget = SingleMoviesWidget(
+    getSingleMovies,
+    getSingleMoviesPresenter,
+    getDetailMovie,
+    getDetailPresenter,
+    addMovieFavorite,
+    isMovieFavorite,
+    removeFavoriteMovie,
+    isFavoriteMoviePresenter
+  );
 
   // phim bộ
   var getSeriesPresenter = GetMovieListPresenter();
   var getSeriesMovies = GetMovieList(getSeriesPresenter);
-  var seriesMoviesWidget = SeriesMoviesWidget(getSeriesMovies,
-      getSeriesPresenter, getDetailMovie, getDetailPresenter);
+  var seriesMoviesWidget = SeriesMoviesWidget(
+      getSeriesMovies,
+      getSeriesPresenter,
+      getDetailMovie,
+      getDetailPresenter,
+      addMovieFavorite,
+      isMovieFavorite,
+      removeFavoriteMovie,
+      isFavoriteMoviePresenter
+  );
 
   // Slide Phim mới
   var getNewMoviesPresenter = GetNewMoviesPresenter();
