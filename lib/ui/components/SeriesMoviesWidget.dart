@@ -13,6 +13,12 @@ class SeriesMoviesWidget extends StatefulWidget {
   final OutputBoundary getMoviesPresenter;
   final InputBoundary getDetailMovies;
   final OutputBoundary getDetailMoviesPresenter;
+
+  // final InputBoundary addMovieFavorite;
+  // final InputBoundary isMovieFavorite;
+  // final InputBoundary removeMovieFavorite;
+  // final OutputBoundary isFavoriteMoviePresenter;
+
   const SeriesMoviesWidget(this.getMoviesUseCase, this.getMoviesPresenter,
       this.getDetailMovies, this.getDetailMoviesPresenter,
       {super.key});
