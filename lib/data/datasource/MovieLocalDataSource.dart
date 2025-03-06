@@ -22,7 +22,7 @@ class MovieLocalDataSource{
       version: 1,
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE $tableName(id TEXT PRIMARY KEY, _name TEXT, _posterUrl TEXT)',
+          'CREATE TABLE $tableName(id TEXT PRIMARY KEY, _name TEXT, _slug TEXT, _originName TEXT, _type TEXT, _posterUrl TEXT, _thumbUrl TEXT, _subDocQuyen INTEGER, _chieuRap INTEGER, _time TEXT, _episodeCurrent TEXT, _qualiry TEXT, _lang TEXT, _year INTEGER)',
         );
       },
     );
@@ -33,7 +33,18 @@ class MovieLocalDataSource{
     await db.insert(tableName, {
       'id': movie.id,
       '_name': movie.name,
+      '_slug': movie.slug,
+      '_originName': movie.originName,
+      '_type': movie.type,
       '_posterUrl': movie.posterUrl,
+      '_thumbUrl': movie.thumbUrl,
+      '_subDocQuyen': movie.subDocQuyen,
+      '_chieuRap': movie.chieuRap,
+      '_time': movie.time,
+      '_episodeCurrent': movie.episodeCurrent,
+      '_qualiry': movie.qualiry,
+      '_lang': movie.lang,
+      '_year': movie.year
     });
   }
 
@@ -46,7 +57,6 @@ class MovieLocalDataSource{
 
   Future<void> deleteMovie(String movieId) async {
     final db = await database;
-    // print(movieId);
     await db.delete(
       tableName,
       where: 'id = ?',

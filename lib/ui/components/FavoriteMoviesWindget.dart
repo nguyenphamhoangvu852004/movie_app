@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
+import 'package:movie_app/ui/components/DetailMovieWidget.dart';
 
 import '../../features/favoritesMovie/addFavorite/FavoriteRequest.dart';
 import '../../features/favoritesMovie/getFavorite/EmtyRequest.dart';
@@ -12,11 +13,22 @@ class FavoriteMoviesWidget extends StatefulWidget {
   final InputBoundary removeFavoriteMovies;
   final OutputBoundary removeFavoritePresenter;
 
+  final InputBoundary getDetailMovie;
+  final OutputBoundary getDetailMoviePresenter;
+  final InputBoundary addMovieFavorite;
+  final InputBoundary isMovieFavorite;
+  final OutputBoundary isFavoriteMoviePresenter;
+
   const FavoriteMoviesWidget(
       this.getFavoriteMovies,
       this.getFavoritePresenter,
       this.removeFavoriteMovies,
       this.removeFavoritePresenter,
+      this.getDetailMovie,
+      this.getDetailMoviePresenter,
+      this.addMovieFavorite,
+      this.isMovieFavorite,
+      this.isFavoriteMoviePresenter,
       {super.key});
 
   @override
@@ -100,6 +112,22 @@ class _FavoriteMoviesWidgetState extends State<FavoriteMoviesWidget> {
                 icon: Icon(Icons.delete, color: Colors.red),
                 onPressed: () => _removeFromFavorites(movie),
               ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailMovieWidget(
+                        movie,
+                        widget.getDetailMovie,
+                        widget.getDetailMoviePresenter,
+                        widget.addMovieFavorite,
+                        widget.isMovieFavorite,
+                        widget.removeFavoriteMovies,
+                        widget.isFavoriteMoviePresenter
+                    ),
+                  )
+                );
+              }
             ),
           );
         },
