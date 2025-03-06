@@ -1,7 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:movie_app/features/favoritesMovie/getFavorite/GetFavoriteMoviePresenter.dart';
+import 'package:movie_app/features/favoritesMovie/getFavorite/GetFavoriteMovieUseCase.dart';
 import 'package:movie_app/features/getMovieList/GetMovieList.dart';
+import 'package:movie_app/ui/components/FavoriteMoviesWindget.dart';
 import 'package:movie_app/ui/components/ListMoreMoviesWidget.dart';
 import 'package:movie_app/ui/components/SingleMoviesWidget.dart';
 import 'package:movie_app/ui/components/SeriesMoviesWidget.dart';
@@ -35,17 +38,27 @@ void main() async {
   // Presenter
   var favoriteMoviePresenter = FavoriteMoviePresenter(); // add remove
   var isFavoriteMoviePresenter = IsFavoriteMoviePresenter(); // check
+  var getFavoriteMoviePresenter = GetFavoriteMoviePresenter();
 
   // UseCase
   var isMovieFavorite = IsFavoriteMovieUseCase(isFavoriteMoviePresenter, repository);
   var addMovieFavorite = AddFavoriteMovieUseCase(favoriteMoviePresenter, repository);
   var removeFavoriteMovie = RemoveFavoriteMovieUseCase(favoriteMoviePresenter, repository);
+  var getFavoriteMovie = GetFavoriteMovieUseCase(getFavoriteMoviePresenter, repository);
+
+
 
 
 
   // chi tiet phim
   var getDetailPresenter = GetDetailMoviePresenter();
   var getDetailMovie = GetDetailMovie(getDetailPresenter);
+
+  var favoriteWidget = FavoriteMoviesWidget(
+      getFavoriteMovie,
+      getFavoriteMoviePresenter,
+      removeFavoriteMovie,
+      favoriteMoviePresenter);
 
   // phim lẻ
   var getSingleMoviesPresenter = GetMovieListPresenter();
@@ -94,6 +107,6 @@ void main() async {
     debugShowCheckedModeBanner: false,
 
     //layout
-    home: SafeArea(child: Layout(homeScreen, widgetTree)),
+    home: SafeArea(child: Layout(homeScreen, widgetTree, favoriteWidget)),
   ));
 }
