@@ -36,10 +36,6 @@ class GetMovieList implements InputBoundary {
               List<Category> categoryList = [];
               List<Country> countryList = [];
 
-              // Debug dữ liệu
-              // print("item['category']: ${item["category"]}");
-              // print("item['country']: ${item["country"]}");
-
               // Xử lý category
               if (item["category"] != null && item["category"] is Iterable) {
                 for (var category in item["category"]) {
@@ -92,9 +88,6 @@ class GetMovieList implements InputBoundary {
           }
           var responseData = GetMovieListResponseData(listData);
           _presenter.execute(responseData);
-          for (var movie in listData) {
-            print('Movie${movie.id}: ${movie.name}');
-          }
         } else {
           throw Exception("API failed with status: ${response.statusCode}");
         }
@@ -109,6 +102,6 @@ class GetMovieList implements InputBoundary {
     if (url.startsWith('http')) {
       return url;
     }
-    return "https://phimimg.com/$url"; // Dùng APP_DOMAIN_CDN_IMAGE từ API
+    return "https://phimimg.com/$url";
   }
 }

@@ -9,7 +9,7 @@ class GetMovieListPresenter implements OutputBoundary {
   @override
   void execute(ResponseData responseData) {
     if (responseData is GetMovieListResponseData) {
-      list = responseData.list; // Cập nhật danh sách mới
+      list = responseData.list;
     }
   }
 

@@ -16,7 +16,7 @@ class GetTypeList implements InputBoundary {
   execute(RequestData requestData) async {
     try {
       var response =
-          await http.get(Uri.parse(APP_DOMAIN_API_DS_PHIM_LE));
+          await http.get(Uri.parse(APP_DOMAIN_API_DS_TYPES));
       var decodedData = jsonDecode(response.body);
       List<Category> categories = [];
       for (var item in decodedData) {
@@ -25,6 +25,7 @@ class GetTypeList implements InputBoundary {
           item["name"].toString(),
           item["slug"].toString(),
         );
+        print(category.toString());
         categories.add(category);
       }
 

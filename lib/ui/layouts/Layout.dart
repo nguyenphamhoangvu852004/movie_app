@@ -5,7 +5,8 @@ class Layout extends StatefulWidget {
   final Widget homeScreen;
   final Widget widgetTree;
   final Widget favorite;
-  const Layout(this.homeScreen,this.widgetTree, this.favorite, {super.key});
+  final Widget findMovieScreen;
+  const Layout(this.homeScreen,this.widgetTree, this.favorite, this.findMovieScreen, {super.key});
   @override
   State<Layout> createState() => _LayoutState();
 }
@@ -23,7 +24,7 @@ class _LayoutState extends State<Layout> {
   Widget build(BuildContext context) {
     final tabs = [
       widget.homeScreen,
-      Container(child: Text("Tap2")),
+      widget.findMovieScreen,
       widget.favorite,
       widget.widgetTree
     ];

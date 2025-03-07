@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_app/features/favoritesMovie/getFavorite/GetFavoriteMoviePresenter.dart';
 import 'package:movie_app/features/favoritesMovie/getFavorite/GetFavoriteMovieUseCase.dart';
+import 'package:movie_app/features/findListMovie/FindMovieList.dart';
+import 'package:movie_app/features/findListMovie/FindMovieListPresenter.dart';
+import 'package:movie_app/features/getCountryList/GetCountryList.dart';
+import 'package:movie_app/features/getCountryList/GetCountryListPresenter.dart';
 import 'package:movie_app/features/getMovieList/GetMovieList.dart';
+import 'package:movie_app/features/getTypeList/GetTypeList.dart';
+import 'package:movie_app/features/getTypeList/GetTypeListPresenter.dart';
 import 'package:movie_app/ui/components/FavoriteMoviesWindget.dart';
 import 'package:movie_app/ui/components/ListMoreMoviesWidget.dart';
 import 'package:movie_app/ui/components/SingleMoviesWidget.dart';
@@ -14,6 +20,7 @@ import 'package:movie_app/features/getNewMovies/GetNewMovies.dart';
 import 'package:movie_app/features/getDetailMovies/GetDetailMovie.dart';
 import 'package:movie_app/features/getDetailMovies/GetDetailMoviePresenter.dart';
 import 'package:movie_app/features/getNewMovies/GetNewMoviesPresenter.dart';
+import 'package:movie_app/ui/screens/FindMovieScreen.dart';
 import 'package:movie_app/ui/screens/HomeScreen.dart';
 import 'data/datasource/MovieLocalDataSource.dart';
 import 'data/repository/MovieRepositoryImpl.dart';
@@ -41,14 +48,14 @@ void main() async {
   var getFavoriteMoviePresenter = GetFavoriteMoviePresenter();
 
   // UseCase
-  var isMovieFavorite = IsFavoriteMovieUseCase(isFavoriteMoviePresenter, repository);
-  var addMovieFavorite = AddFavoriteMovieUseCase(favoriteMoviePresenter, repository);
-  var removeFavoriteMovie = RemoveFavoriteMovieUseCase(favoriteMoviePresenter, repository);
-  var getFavoriteMovie = GetFavoriteMovieUseCase(getFavoriteMoviePresenter, repository);
-
-
-
-
+  var isMovieFavorite =
+      IsFavoriteMovieUseCase(isFavoriteMoviePresenter, repository);
+  var addMovieFavorite =
+      AddFavoriteMovieUseCase(favoriteMoviePresenter, repository);
+  var removeFavoriteMovie =
+      RemoveFavoriteMovieUseCase(favoriteMoviePresenter, repository);
+  var getFavoriteMovie =
+      GetFavoriteMovieUseCase(getFavoriteMoviePresenter, repository);
 
   // chi tiet phim
   var getDetailPresenter = GetDetailMoviePresenter();
@@ -63,22 +70,20 @@ void main() async {
       getDetailPresenter,
       addMovieFavorite,
       isMovieFavorite,
-      isFavoriteMoviePresenter
-  );
+      isFavoriteMoviePresenter);
 
   // phim lẻ
   var getSingleMoviesPresenter = GetMovieListPresenter();
   var getSingleMovies = GetMovieList(getSingleMoviesPresenter);
   var singleMoviesWidget = SingleMoviesWidget(
-    getSingleMovies,
-    getSingleMoviesPresenter,
-    getDetailMovie,
-    getDetailPresenter,
-    addMovieFavorite,
-    isMovieFavorite,
-    removeFavoriteMovie,
-    isFavoriteMoviePresenter
-  );
+      getSingleMovies,
+      getSingleMoviesPresenter,
+      getDetailMovie,
+      getDetailPresenter,
+      addMovieFavorite,
+      isMovieFavorite,
+      removeFavoriteMovie,
+      isFavoriteMoviePresenter);
 
   // phim bộ
   var getSeriesPresenter = GetMovieListPresenter();
@@ -91,18 +96,38 @@ void main() async {
       addMovieFavorite,
       isMovieFavorite,
       removeFavoriteMovie,
-      isFavoriteMoviePresenter
-  );
+      isFavoriteMoviePresenter);
 
   // Slide Phim mới
   var getNewMoviesPresenter = GetNewMoviesPresenter();
   var getNewMovies = GetNewMovies(getNewMoviesPresenter);
 
-  var newMoviesWidget = NewMoviesWidget(getNewMovies,
-      getNewMoviesPresenter);
+  var newMoviesWidget = NewMoviesWidget(getNewMovies, getNewMoviesPresenter);
+
+  var getTypeListPresenter = GetTypeListPresenter();
+  var getTypeListUseCase = GetTypeList(getTypeListPresenter);
+  var getCountryListPresenter = GetCountryListPresenter();
+  var getCountryListUseCase = GetCountryList(getCountryListPresenter);
+  var findListMoviePresenter = FindMovieListPresenter();
+  var findListMovieUseCase = FindMovieList(findListMoviePresenter);
+  var findMovieScreen = FindMovieScreen(
+      getTypeListUseCase,
+      getTypeListPresenter,
+      getCountryListUseCase,
+      getCountryListPresenter,
+      findListMovieUseCase,
+      findListMoviePresenter,
+      getDetailMovie,
+      getDetailPresenter,
+      addMovieFavorite,
+      isMovieFavorite,
+      removeFavoriteMovie,
+      isFavoriteMoviePresenter
+  );
 
   // trong Home Screen có các widget
-  final homeScreen = HomeScreen(singleMoviesWidget, seriesMoviesWidget, newMoviesWidget );
+  final homeScreen =
+      HomeScreen(singleMoviesWidget, seriesMoviesWidget, newMoviesWidget);
 
   final widgetTree = WidgetTree();
 
@@ -113,6 +138,7 @@ void main() async {
     debugShowCheckedModeBanner: false,
 
     //layout
-    home: SafeArea(child: Layout(homeScreen, widgetTree, favoriteWidget)),
+    home: SafeArea(
+        child: Layout(homeScreen, widgetTree, favoriteWidget, findMovieScreen)),
   ));
 }

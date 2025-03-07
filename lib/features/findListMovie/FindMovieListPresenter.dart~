@@ -1,0 +1,16 @@
+import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
+import 'package:movie_app/constants/interfaces/ResponseData.dart';
+
+class FindMovieListPresenter implements OutputBoundary{
+  @override
+  void execute(ResponseData responseData) {
+    // TODO: implement execute
+  }
+
+  @override
+  getData() {
+    // TODO: implement getData
+    throw UnimplementedError();
+  }
+
+}

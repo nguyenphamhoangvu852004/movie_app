@@ -3,18 +3,12 @@ import 'package:movie_app/model/Movies.dart';
 
 class GetMovieListResponseData implements ResponseData  {
 
-  List<Movies> _list;
+  List<Movies> list;
 
-  GetMovieListResponseData(this._list);
-
-  List<Movies> get list => _list;
-
-  set list(List<Movies> value) {
-    _list = value;
-  }
+  GetMovieListResponseData(this.list);
 
   @override
   String toString() {
-    return 'GetMovieListResponseData{_list: $_list}';
+    return 'GetMovieListResponseData{_list: $list}';
   }
 }

@@ -170,6 +170,10 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
     await widget.getMoviesUseCase.execute(requestData);
     setState(() {
       data = widget.getMoviesPresenter.getData();
+      print("Data cua Phim Le:  ");
+      for (var movie in data) {
+        print(movie.toString());
+      }
       isLoading = false;
     });
   }
