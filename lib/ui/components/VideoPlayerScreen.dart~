@@ -13,8 +13,8 @@ class VideoPlayerScreen extends StatefulWidget {
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late VideoPlayerController _videoPlayerController;
-  late ChewieController _chewieController;
-  bool isVideoInitialized = false;
+ late ChewieController _chewieController;
+bool isVideoInitialized = false;
   @override
   void initState() {
     super.initState();
@@ -27,17 +27,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       autoPlay: true,
       looping: false,
     );
-    _videoPlayerController.initialize().then((_) {
-      setState(() {
-        isVideoInitialized = true;
-      });
-    });
+     _videoPlayerController.initialize().then((_) {
+       setState(() {
+         isVideoInitialized = true;
+       });
+     });
   }
 
   @override
   void dispose() {
     _videoPlayerController.dispose();
-    _chewieController.dispose();
+    _chewieController?.dispose();
     WakelockPlus.disable();
     super.dispose();
   }
@@ -47,8 +47,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     if (!isVideoInitialized) {
       return const Center(child: CircularProgressIndicator());
     }
-    return AspectRatio(
-        aspectRatio: _videoPlayerController.value.aspectRatio,
-        child: Chewie(controller: _chewieController));
+    return AspectRatio(aspectRatio: _videoPlayerController.value.aspectRatio, child: Chewie(controller: _chewieController));
   }
 }

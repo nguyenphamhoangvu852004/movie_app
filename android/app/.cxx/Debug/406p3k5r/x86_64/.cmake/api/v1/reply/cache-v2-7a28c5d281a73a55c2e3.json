@@ -527,7 +527,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "CMAKE_DLLTOOL-NOTFOUND"
+			"value" : "C:/Users/nphv8/mingw64/bin/dlltool.exe"
 		},
 		{
 			"name" : "CMAKE_ERROR_DEPRECATED",

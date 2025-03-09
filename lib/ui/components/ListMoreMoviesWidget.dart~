@@ -41,6 +41,7 @@ class _ListMoreMoviesWidgetState extends State<ListMoreMoviesWidget> {
   int currentPage = 1;
   bool isLoading = false;
   late ScrollController _scrollController;
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -48,11 +49,13 @@ class _ListMoreMoviesWidgetState extends State<ListMoreMoviesWidget> {
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
     fetchData();
+    _searchController.addListener(_filterMovies); // Lắng nghe thay đổi trong search
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -69,6 +72,17 @@ class _ListMoreMoviesWidgetState extends State<ListMoreMoviesWidget> {
             title: const Text(
               'Danh Sách Phim',
             ),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(40), // Chiều cao của thanh tìm kiếm
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Tìm kiếm phim...',
+                    filled: true,
+                    prefixIcon: const Icon(Icons.search),
+                  ),
+                ),
+              ),
             ),
           // Danh sách phim
           SliverPadding(
@@ -178,6 +192,19 @@ class _ListMoreMoviesWidgetState extends State<ListMoreMoviesWidget> {
       filteredData = List.from(data); // Cập nhật filteredData ban đầu
       currentPage++;
       isLoading = false;
+    });
+  }
+
+  void _filterMovies() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        filteredData = List.from(data); // Nếu không tìm kiếm, hiển thị toàn bộ data
+      } else {
+        filteredData = data
+            .where((movie) => movie.name.toLowerCase().contains(query))
+            .toList(); // Lọc theo tên phim
+      }
     });
   }
 }

@@ -55,7 +55,7 @@ class _NewMoviesWidgetState extends State<NewMoviesWidget> {
   @override
   Widget build(BuildContext context) {
     if (data.isEmpty) {
-      return Center(child: CircularProgressIndicator(color: Colors.black));
+      return Center(child: CircularProgressIndicator(color: Colors.blueAccent));
     }
 
     return Column(

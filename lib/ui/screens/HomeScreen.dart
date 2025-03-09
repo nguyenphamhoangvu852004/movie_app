@@ -22,8 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF000000), // Màu đen deep
-              Color(0xFF4E342E), // Màu nâu trầm ấm
+              Colors.grey,
+              Colors.white,
             ],
           ),
         ),

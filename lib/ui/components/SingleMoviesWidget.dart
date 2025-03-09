@@ -3,7 +3,6 @@ import 'package:movie_app/constants/DomainUrl.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
 import 'package:movie_app/features/getMovieList/GetMovieListRequestData.dart';
 import 'package:movie_app/ui/components/ListMoreMoviesWidget.dart';
-import 'package:shimmer/shimmer.dart';
 import '../../../constants/interfaces/InputBoundary.dart';
 import '../../model/Movies.dart';
 import 'DetailMovieWidget.dart';
@@ -60,7 +59,7 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                    color: Colors.black),
               ),
               GestureDetector(
                 onTap: () {
@@ -82,7 +81,7 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
                 },
                 child: const Text(
                   "Xem Thêm",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                  style: TextStyle(fontSize: 16, color: Colors.black),
                 ),
               ),
             ],
@@ -91,11 +90,11 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
         SizedBox(
           height: 230,
           child: isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator(color: Colors.black))
               : data.isEmpty
                   ? const Center(
                       child: Text("Không có dữ liệu",
-                          style: TextStyle(color: Colors.white)))
+                          style: TextStyle(color: Colors.black)))
                   : ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: data.length,
@@ -136,14 +135,14 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
                 width: 130,
                 fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) =>
-                    loadingProgress == null ? child : shimmerLoadingEffect(),
+                    loadingProgress == null ? child : CircularProgressIndicator(color: Colors.black),
               ),
             ),
             Text(
               movie.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 14, color: Colors.white),
+              style: const TextStyle(fontSize: 14, color: Colors.black),
             ),
           ],
         ),
@@ -151,17 +150,6 @@ class _SingleMoviesWidgetState extends State<SingleMoviesWidget> {
     );
   }
 
-  Widget shimmerLoadingEffect() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[800]!,
-      highlightColor: Colors.grey[600]!,
-      child: Container(
-        width: 130,
-        height: 180,
-        color: Colors.black,
-      ),
-    );
-  }
 
   void fetchMoviesData() async {
     setState(() => isLoading = true);
