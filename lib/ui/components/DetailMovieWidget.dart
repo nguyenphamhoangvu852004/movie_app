@@ -8,6 +8,8 @@ import '../../features/favoritesMovie/addFavorite/FavoriteRequest.dart';
 import '../../features/favoritesMovie/isFavorite/IsFavoriteRequest.dart';
 import '../../model/DetailMovies.dart';
 import '../../model/Movies.dart';
+import '../../model/User.dart';
+import '../screens/WidgetTree.dart';
 
 class DetailMovieWidget extends StatefulWidget {
   final Movies movie;
@@ -37,6 +39,8 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
   DetailMovies? detailMovie;
   bool isFavorite = false;
   int _selectedServerIndex = 0;
+  User? user = AuthRepoImp().getCurrentUser();
+
 
   @override
   void initState() {
@@ -211,8 +215,9 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
     });
   }
 
+
   void _toggleFavorite() async {
-    var request = FavoriteRequest(1,widget.movie);
+    var request = FavoriteRequest(user?.id,widget.movie);
     if (isFavorite) {
       await widget.removeMovieFavorite.execute(request);
     } else {
@@ -224,7 +229,7 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
   }
 
   void _checkIfFavorite() async {
-    var request = IsFavoriteRequest(1,widget.movie.id);
+    var request = IsFavoriteRequest(user?.id ,widget.movie.id);
     await widget.isMovieFavorite.execute(request);
     bool result = widget.isFavoriteMoviePresenter.getData();
     setState(() {

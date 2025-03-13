@@ -49,30 +49,29 @@ class _FavoriteMoviesWidgetState extends State<FavoriteMoviesWidget> {
   }
 
   Future<void> _loadFavoriteMovies() async {
-
     setState(() {
       isLoading = true;
     });
-    User? user = AuthRepoImp().getCurrentUser();
-    if (user != null && user.id != null) {
-      await widget.getFavoriteMovies.execute(EmptyRequest(user.id!));
-    }
-    final movies = widget.getFavoritePresenter.getData() as List<Movies>?;
 
-    if (movies != null || movies!.isNotEmpty || movies.length > 0) {
-      setState(() {
-        favoriteMovies = movies;
-      });
-    }else{
+    User? user = AuthRepoImp().getCurrentUser();
+
+    if (user == null || user.id == null) {
       setState(() {
         favoriteMovies = [];
+        isLoading = false;
       });
+      return;
     }
 
+    await widget.getFavoriteMovies.execute(EmptyRequest(user.id!));
+    final movies = widget.getFavoritePresenter.getData() as List<Movies>?;
+
     setState(() {
+      favoriteMovies = (movies != null && movies.isNotEmpty) ? movies : [];
       isLoading = false;
     });
   }
+
 
   Future<void> _removeFromFavorites(Movies movie) async {
     User? user = AuthRepoImp().getCurrentUser();

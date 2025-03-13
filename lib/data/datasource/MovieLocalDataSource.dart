@@ -27,7 +27,7 @@ class MovieLocalDataSource{
          // Tạo bảng favorite_movies có khóa ngoại user_id
       await db.execute('''
         CREATE TABLE favorite_movies(
-          id TEXT PRIMARY KEY,
+          id TEXT,
           user_id INTEGER,
           _name TEXT,
           _slug TEXT,
@@ -42,6 +42,7 @@ class MovieLocalDataSource{
           _qualiry TEXT,
           _lang TEXT,
           _year INTEGER,
+          PRIMARY KEY (user_id, id),
           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         )
       ''');
@@ -60,6 +61,14 @@ class MovieLocalDataSource{
 
   Future<void> insertMovie(int userId,Movies movie) async {
     final db = await database;
+
+    final userExists = await db.query('users', where: 'id = ?', whereArgs: [userId]);
+    if (userExists.isEmpty) {
+      throw Exception("User không tồn tại");
+    }
+
+    print("User Check:::$userExists");
+
     await db.insert(tableName, {
       'id': movie.id,
       'user_id': userId,

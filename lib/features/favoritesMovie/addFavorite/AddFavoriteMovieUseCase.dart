@@ -19,7 +19,7 @@ class AddFavoriteMovieUseCase implements InputBoundary{
       final data = (request as FavoriteRequest);
       final movie = data.movie;
       final userId = data.userId;
-      await repository.addToFavorites(userId,movie);
+      await repository.addToFavorites(userId!,movie);
 
       _presenter.execute(FavoriteResponse(
           success: true,
