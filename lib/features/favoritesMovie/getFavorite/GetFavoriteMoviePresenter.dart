@@ -6,7 +6,7 @@ import 'package:movie_app/features/favoritesMovie/getFavorite/GetFavoriteRespons
 import '../../../model/Movies.dart';
 
 class GetFavoriteMoviePresenter extends OutputBoundary{
-  late List<Movies> listMovies;
+   late List<Movies> listMovies;
 
   @override
   void execute(ResponseData response) {

@@ -212,7 +212,7 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
   }
 
   void _toggleFavorite() async {
-    var request = FavoriteRequest(widget.movie);
+    var request = FavoriteRequest(1,widget.movie);
     if (isFavorite) {
       await widget.removeMovieFavorite.execute(request);
     } else {
@@ -224,7 +224,7 @@ class _DetailMovieWidgetState extends State<DetailMovieWidget> {
   }
 
   void _checkIfFavorite() async {
-    var request = IsFavoriteRequest(widget.movie.id);
+    var request = IsFavoriteRequest(1,widget.movie.id);
     await widget.isMovieFavorite.execute(request);
     bool result = widget.isFavoriteMoviePresenter.getData();
     setState(() {

@@ -19,8 +19,8 @@ class IsFavoriteMovieUseCase implements InputBoundary{
     try{
       final data = (request as IsFavoriteRequest);
       final movieId = data.movieId;
-      final userId = data.userId;
-      bool isExists = await repository.isFavorite(userId,movieId);
+
+      bool isExists = await repository.isFavorite(movieId);
 
       _presenter.execute(IsFavoriteResponse(isExists));
     }catch(e){

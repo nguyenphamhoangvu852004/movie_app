@@ -8,5 +8,5 @@ class FavoriteRequest extends RequestData{
   FavoriteRequest(this.userId,this._movie);
 
   Movies get movie => _movie;
-
+  int get userId => _userId;
 }

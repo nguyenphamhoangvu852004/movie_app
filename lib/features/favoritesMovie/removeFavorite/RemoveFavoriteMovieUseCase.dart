@@ -18,8 +18,8 @@ class RemoveFavoriteMovieUseCase implements InputBoundary{
     try {
       final data = (request as FavoriteRequest);
       final movie = data.movie;
-
-      await repository.removeFromFavorites(movie.id);
+      final userId = data.userId;
+      await repository.removeFromFavorites(userId,movie.id);
       // print(movie.id);
 
       _presenter.execute(FavoriteResponse(

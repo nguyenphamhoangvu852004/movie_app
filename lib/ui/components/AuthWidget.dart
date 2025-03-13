@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/features/authentication/AuthRepo/AuthRepoImp.dart';
+import 'package:movie_app/constants/interfaces/InputBoundary.dart';
+import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
+import 'package:movie_app/features/authentication/login/LoginRequestData.dart';
+import 'package:movie_app/features/authentication/register/RegisterRequestData.dart';
 
-import '../../features/authentication/AuthRepo/AuthRepo.dart';
-import '../../model/AuthResult.dart';
+import '../screens/WidgetTree.dart';
 
 class AuthWidget extends StatefulWidget {
-  const AuthWidget({super.key});
+  final InputBoundary registerUseCase;
+  final OutputBoundary registerPresenter;
+  final InputBoundary loginUseCase;
+  final OutputBoundary loginPresenter;
+  AuthWidget(this.registerUseCase, this.registerPresenter, this.loginUseCase,
+      this.loginPresenter);
 
   @override
   State<AuthWidget> createState() => _AuthWidgetState();
@@ -15,74 +22,34 @@ class _AuthWidgetState extends State<AuthWidget> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   bool isLogin = true;
   bool isLoading = false;
   String? errorMessage;
-  final AuthRepo _authRepo = AuthRepoImp();
 
-  Future<void> _authenticate() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() {
-      isLoading = true;
-      errorMessage = null;
-    });
-
-    AuthResult result;
-    if (isLogin) {
-      result = await _authRepo.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-    } else {
-      result = await _authRepo.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-    }
-
-    setState(() {
-      isLoading = false;
-      if (result.isSuccess) {
-        print("Thành công: UID = ${result.uid}");
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        errorMessage = result.error ?? "Thất bại không rõ nguyên nhân";
-        print("Lỗi: $errorMessage");
-      }
-    });
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _usernameController.dispose();
+    super.dispose();
   }
 
-  Future<void> _loginWithGoogle() async {
-    setState(() {
-      isLoading = true;
-      errorMessage = null;
-    });
-
-    final result = await _authRepo.loginWithGoogle();
-    setState(() {
-      isLoading = false;
-      if (result!.isSuccess) {
-        print("Đăng nhập Google thành công: UID = ${result.uid}");
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        errorMessage = result.error ?? "Đăng nhập Google thất bại";
-        print("Lỗi Google: $errorMessage");
-      }
-    });
-  }
-
-  Widget _buildTextField(String label, TextEditingController controller, bool obscureText) {
+  Widget _buildTextField(
+      String label, TextEditingController controller, bool obscureText) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(labelText: label),
       validator: (value) {
         if (value == null || value.isEmpty) return 'Không được để trống';
-        if (label == 'Email' && !value.contains('@')) return 'Email không hợp lệ';
-        if (label == 'Password' && value.length < 6) return 'Mật khẩu ít nhất 6 ký tự';
+        if (label == 'Email' && !value.contains('@'))
+          return 'Email không hợp lệ';
+        if (label == 'Password' && value.length < 6)
+          return 'Mật khẩu ít nhất 6 ký tự';
         if (label == 'Xác nhận mật khẩu' && value != _passwordController.text) {
           return 'Mật khẩu không khớp';
         }
@@ -102,25 +69,36 @@ class _AuthWidgetState extends State<AuthWidget> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (!isLogin)
+                _buildTextField(
+                    'Username', _usernameController, false), // Thêm username
               _buildTextField('Email', _emailController, false),
               _buildTextField('Password', _passwordController, true),
-              if (!isLogin) _buildTextField('Xác nhận mật khẩu', _confirmPasswordController, true),
+              if (!isLogin)
+                _buildTextField(
+                    'Xác nhận mật khẩu', _confirmPasswordController, true),
               if (errorMessage != null)
                 Text(errorMessage!, style: const TextStyle(color: Colors.red)),
               const SizedBox(height: 20),
               isLoading
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
-                onPressed: _authenticate,
-                child: Text(isLogin ? 'Đăng nhập' : 'Đăng ký'),
-              ),
+                      onPressed: _authenticate,
+                      child: Text(isLogin ? 'Đăng nhập' : 'Đăng ký'),
+                    ),
               TextButton(
-                onPressed: () => setState(() => isLogin = !isLogin),
-                child: Text(isLogin ? 'Chưa có tài khoản? Đăng ký' : 'Đã có tài khoản? Đăng nhập'),
-              ),
-              TextButton(
-                onPressed: _loginWithGoogle,
-                child: const Text('Đăng nhập bằng Google'),
+                onPressed: () => setState(() {
+                  isLogin = !isLogin;
+                  ;
+                  _emailController.clear();
+                  _passwordController.clear();
+                  _confirmPasswordController.clear();
+                  _usernameController.clear();
+                  errorMessage = null; // Xóa thông báo lỗi nếu có
+                }),
+                child: Text(isLogin
+                    ? 'Chưa có tài khoản? Đăng ký'
+                    : 'Đã có tài khoản? Đăng nhập'),
               ),
             ],
           ),
@@ -129,11 +107,53 @@ class _AuthWidgetState extends State<AuthWidget> {
     );
   }
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
+  void _authenticate() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (isLogin) {
+      print("Đăng nhập với Email: $email");
+
+      final req = LoginRequestData(email, password);
+      await widget.loginUseCase.execute(req);
+      final user = await widget.loginPresenter.getData();
+
+      if (user == null) {
+        setState(() {
+          errorMessage = "Email hoặc mật khẩu không đúng.";
+        });
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Đăng nhập thành công!")));
+
+        Future.delayed(Duration(seconds: 1), () {
+          AuthRepoImp().loginSuccess(user); // Cập nhật trạng thái đăng nhập
+        });
+      }
+    } else {
+      final username = _usernameController.text.trim();
+      print("Đăng ký với Username: $username, Email: $email");
+
+      final req = RegisterRequestData(username, email, password);
+      await widget.registerUseCase.execute(req);
+      final user = await widget.registerPresenter.getData();
+
+      if (user == null) {
+        setState(() {
+          errorMessage = "Đăng ký thất bại. Vui lòng thử lại.";
+        });
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Đăng ký thành công!")));
+
+        Future.delayed(Duration(seconds: 2), () {
+          setState(() {
+            isLogin = true;
+          });
+        });
+      }
+    }
   }
 }

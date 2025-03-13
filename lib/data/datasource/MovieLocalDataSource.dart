@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:movie_app/model/User.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -20,18 +23,46 @@ class MovieLocalDataSource{
     return await openDatabase(
       path,
       version: 1,
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE $tableName(id TEXT PRIMARY KEY, _name TEXT, _slug TEXT, _originName TEXT, _type TEXT, _posterUrl TEXT, _thumbUrl TEXT, _subDocQuyen INTEGER, _chieuRap INTEGER, _time TEXT, _episodeCurrent TEXT, _qualiry TEXT, _lang TEXT, _year INTEGER)',
-        );
+      onCreate: (db, version) async {
+         // Tạo bảng favorite_movies có khóa ngoại user_id
+      await db.execute('''
+        CREATE TABLE favorite_movies(
+          id TEXT PRIMARY KEY,
+          user_id INTEGER,
+          _name TEXT,
+          _slug TEXT,
+          _originName TEXT,
+          _type TEXT,
+          _posterUrl TEXT,
+          _thumbUrl TEXT,
+          _subDocQuyen INTEGER,
+          _chieuRap INTEGER,
+          _time TEXT,
+          _episodeCurrent TEXT,
+          _qualiry TEXT,
+          _lang TEXT,
+          _year INTEGER,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      ''');
+
+        await db.execute('''
+        CREATE TABLE users(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT,
+          email TEXT UNIQUE,
+          password TEXT
+        )
+      ''');
       },
     );
   }
 
-  Future<void> insertMovie(Movies movie) async {
+  Future<void> insertMovie(int userId,Movies movie) async {
     final db = await database;
     await db.insert(tableName, {
       'id': movie.id,
+      'user_id': userId,
       '_name': movie.name,
       '_slug': movie.slug,
       '_originName': movie.originName,
@@ -48,30 +79,65 @@ class MovieLocalDataSource{
     });
   }
 
-  Future<List<Movies>> getFavoriteMovies() async {
+  Future<List<Movies>> getFavoriteMovies(int userId) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(tableName);
+    final List<Map<String, dynamic>> maps = await db.query(
+      'favorite_movies',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
 
     return maps.map((movieMap) => Movies.fromMap(movieMap)).toList();
   }
 
-  Future<void> deleteMovie(String movieId) async {
+  Future<void> deleteMovie(int userId, String movieId) async {
     final db = await database;
     await db.delete(
       tableName,
-      where: 'id = ?',
-      whereArgs: [movieId], // Avoid SQL Injection
+      where: 'id = ? AND user_id = ?',
+      whereArgs: [movieId, userId], // Chỉ xóa phim của đúng user
     );
   }
 
-  Future<bool> isFavorite(String movieId) async {
+
+  Future<bool> isFavorite(int userId, String movieId) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
-      tableName,
-      where: 'id = ?',
-      whereArgs: [movieId],
+      'favorite_movies',
+      where: 'user_id = ? AND id = ?',
+      whereArgs: [userId, movieId],
     );
     return maps.isNotEmpty;
+  }
+
+  //User
+  Future<User?> registerUser(String username,String email, String password) async {
+    final db = await database;
+     int rs =  await db.insert('users', {
+      'username': username,
+       'email':email,
+      'password': password,
+    });
+
+     if(rs!=0){
+       User? user = await this.findUserByEmail(email);
+       return user;
+     }
+     return null;
+  }
+
+  Future<User?> findUserByEmail(String email) async{
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+    if(result.isNotEmpty){
+      return User.fromMap(result.first);
+    }
+    return null;
   }
 
 }

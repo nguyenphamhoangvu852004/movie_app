@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/constants/interfaces/InputBoundary.dart';
 import 'package:movie_app/constants/interfaces/OutputBoundary.dart';
+import 'package:movie_app/model/User.dart';
 import 'package:movie_app/ui/components/DetailMovieWidget.dart';
+import 'package:movie_app/ui/screens/WidgetTree.dart';
 
 import '../../features/favoritesMovie/addFavorite/FavoriteRequest.dart';
 import '../../features/favoritesMovie/getFavorite/EmtyRequest.dart';
@@ -38,25 +40,32 @@ class FavoriteMoviesWidget extends StatefulWidget {
 class _FavoriteMoviesWidgetState extends State<FavoriteMoviesWidget> {
   List<Movies> favoriteMovies = [];
   bool isLoading = false;
-
   @override
   void initState() {
     super.initState();
-    _loadFavoriteMovies();
+    if (AuthRepoImp().getCurrentUser() != null) {
+      _loadFavoriteMovies();
+    }
   }
 
   Future<void> _loadFavoriteMovies() async {
+
     setState(() {
       isLoading = true;
     });
-
-    await widget.getFavoriteMovies.execute(EmptyRequest()); // Gửi request để lấy danh sách yêu thích
+    User? user = AuthRepoImp().getCurrentUser();
+    if (user != null && user.id != null) {
+      await widget.getFavoriteMovies.execute(EmptyRequest(user.id!));
+    }
     final movies = widget.getFavoritePresenter.getData() as List<Movies>?;
-    print(movies);
 
-    if (movies != null) {
+    if (movies != null || movies!.isNotEmpty || movies.length > 0) {
       setState(() {
         favoriteMovies = movies;
+      });
+    }else{
+      setState(() {
+        favoriteMovies = [];
       });
     }
 
@@ -66,9 +75,12 @@ class _FavoriteMoviesWidgetState extends State<FavoriteMoviesWidget> {
   }
 
   Future<void> _removeFromFavorites(Movies movie) async {
-    var request = FavoriteRequest(movie);
-    await widget.removeFavoriteMovies.execute(request);
-    _loadFavoriteMovies();
+    User? user = AuthRepoImp().getCurrentUser();
+    if (user != null && user.id != null) {
+      var request = FavoriteRequest(user.id!, movie);
+      await widget.removeFavoriteMovies.execute(request);
+      await _loadFavoriteMovies();
+    }
   }
 
   @override
@@ -80,58 +92,59 @@ class _FavoriteMoviesWidgetState extends State<FavoriteMoviesWidget> {
         actions: [
           IconButton(
             icon: Icon(Icons.refresh, color: Colors.white),
-            onPressed: _loadFavoriteMovies,
+            onPressed:
+              _loadFavoriteMovies,
           ),
         ],
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator()) // Hiển thị loading khi đang tải
+          ? Center(
+              child:
+                  CircularProgressIndicator()) // Hiển thị loading khi đang tải
           : favoriteMovies.isEmpty
-          ? Center(child: Text("Chưa có phim yêu thích!"))
-          : ListView.builder(
-        itemCount: favoriteMovies.length,
-        itemBuilder: (context, index) {
-          final movie = favoriteMovies[index];
-          return Card(
-            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  movie.posterUrl,
-                  width: 50,
-                  height: 75,
-                  fit: BoxFit.cover,
+              ? Center(child: Text("Chưa có phim yêu thích!"))
+              : ListView.builder(
+                  itemCount: favoriteMovies.length,
+                  itemBuilder: (context, index) {
+                    final movie = favoriteMovies[index];
+                    return Card(
+                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ListTile(
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              movie.posterUrl,
+                              width: 50,
+                              height: 75,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          title: Text(movie.name,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => _removeFromFavorites(movie),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailMovieWidget(
+                                      movie,
+                                      widget.getDetailMovie,
+                                      widget.getDetailMoviePresenter,
+                                      widget.addMovieFavorite,
+                                      widget.isMovieFavorite,
+                                      widget.removeFavoriteMovies,
+                                      widget.isFavoriteMoviePresenter),
+                                ));
+                          }),
+                    );
+                  },
                 ),
-              ),
-              title: Text(movie.name, style: TextStyle(fontWeight: FontWeight.bold)),
-              trailing: IconButton(
-                icon: Icon(Icons.delete, color: Colors.red),
-                onPressed: () => _removeFromFavorites(movie),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailMovieWidget(
-                        movie,
-                        widget.getDetailMovie,
-                        widget.getDetailMoviePresenter,
-                        widget.addMovieFavorite,
-                        widget.isMovieFavorite,
-                        widget.removeFavoriteMovies,
-                        widget.isFavoriteMoviePresenter
-                    ),
-                  )
-                );
-              }
-            ),
-          );
-        },
-      ),
     );
   }
 }
